@@ -5,11 +5,13 @@ using System.Web;
 
 namespace ProjectTemplate
 {
-    public class Person
+    public class UserAccount
     {
         public string firstName;
         public string lastName;
-        public int phoneNumber;
+        public string email;
+        public string username;
+        public string password;
+        public string department;
     }
-
 }
