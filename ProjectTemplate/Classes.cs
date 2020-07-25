@@ -12,4 +12,14 @@ namespace ProjectTemplate
         public int phoneNumber;
     }
 
+    public class UserAccount
+    {
+        public string firstName;
+        public string lastName;
+        public string email;
+        public string username;
+        public string password;
+        public string department;
+    }
+
 }
