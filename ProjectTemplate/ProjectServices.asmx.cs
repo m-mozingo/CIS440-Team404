@@ -157,5 +157,19 @@ namespace ProjectTemplate
             sqlConnection.Close();
         }
 
+        [WebMethod]
+        public void accountValidate(string Username, string Password)
+        {
+
+            bool repeat = false;
+
+            string sqlQuery = "SELECT * FROM `summer2020group1`.`UserAccounts`";
+
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+
+            sqlConnection.Open();
+            MySqlCommand sqlCommand = new MySqlCommand(sqlQuery, sqlConnection);
+        }
+
     }
 }
