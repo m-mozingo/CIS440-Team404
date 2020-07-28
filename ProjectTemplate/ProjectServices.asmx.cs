@@ -158,17 +158,100 @@ namespace ProjectTemplate
         }
 
         [WebMethod]
-        public void accountValidate(string Username, string Password)
+        public bool AccountValidate(string Username)
         {
 
             bool repeat = false;
 
-            string sqlQuery = "SELECT * FROM `summer2020group1`.`UserAccounts`";
+
+            string sqlQuery = "SELECT COUNT(Username) FROM `summer2020group1`.`UserAccounts` WHERE Username=@Username";
 
             MySqlConnection sqlConnection = new MySqlConnection(getConString());
 
             sqlConnection.Open();
             MySqlCommand sqlCommand = new MySqlCommand(sqlQuery, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@Username", HttpUtility.UrlDecode(Username));
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+
+            DataTable sqlDt = new DataTable();
+
+            sqlDa.Fill(sqlDt);
+
+            if (sqlDt.Rows.Count > 0)
+            {
+                repeat = false;
+            }
+
+            return repeat;
+
+        }
+
+        public bool LogOn(string Username, string Password)
+        {
+            //LOGIC: pass the parameters into the database to see if an account
+            //with these credentials exist.  If it does, then return true.  If
+            //it doesn't, then return false
+
+            //we return this flag to tell them if they logged in or not
+            bool success = false;
+
+            //our connection string comes from our web.config file like we talked about earlier
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
+            string sqlSelect = "SELECT id FROM accounts WHERE userid=@Username and pass=@Password";
+
+
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(Username));
+            sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(Password));
+
+            //a data adapter acts like a bridge between our command object and 
+            //the data we are trying to get back and put in a table object
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //here's the table we want to fill with the results from our query
+            DataTable sqlDt = new DataTable();
+            //here we go filling it!
+            sqlDa.Fill(sqlDt);
+            //check to see if any rows were returned.  If they were, it means it's 
+            //a legit account
+            if (sqlDt.Rows.Count > 0)
+            {
+                //flip our flag to true so we return a value that lets them know they're logged in
+                success = true;
+            }
+            //return the result!
+            return success;
+        }
+
+        //EXAMPLE OF AN UPDATE QUERY
+        [WebMethod]
+        public void ChangePassword(string Password, string ID)
+        {
+            MySqlConnection sqlConnection = new MySqlConnection(getConString());
+            //this is a simple update, with parameters to pass in values
+            string sqlSelect = "UPDATE UserAccounts SET Password=@Password WHERE id=@ID";
+
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@Password", HttpUtility.UrlDecode(Password));
+            sqlCommand.Parameters.AddWithValue("@ID", HttpUtility.UrlDecode(ID));
+
+            sqlConnection.Open();
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            sqlConnection.Close();
         }
 
     }

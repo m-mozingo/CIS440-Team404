@@ -30,6 +30,7 @@
         .white * {
             background-color: white;
         }
+
     </style>
 
 <script href="JavaScript.js"></script>
@@ -50,16 +51,25 @@
                 var pass = document.getElementById("passwordCreateId").value;
                 var department = document.getElementById("departmentId").value;
 
-                // WebService "Create Account" goes here
-                //CreateAccounts(fname, lName, mail, username, pass, department)
-                // alert("Account Created! Please continue by logging in")
+                //WebService "AccountValidate" goes here
+                //AccountValidate(username)
+                //if (AccountValidate(username)) {
+
+                    // WebService "Create Account" goes here
+                    //CreateAccounts(fname, lName, mail, username, pass, department)
+
+                    // alert("Account Created! Please continue by logging in")
 
 
-                //window.location.href = 'file:///C:/Users/baden/OneDrive/Desktop/CIS%20440%20Project/LoginPage/Login%20Page.html';
+                    //window.location.href = 'file:///C:/Users/baden/OneDrive/Desktop/CIS%20440%20Project/LoginPage/Login%20Page.html';
+                //}
+                //else {
+                    //alert("ERROR: Username and/or password already in use. Please enter a new username/password")
+                //}
 
             }
 
-        }
+                }
     </script>
 
     <title>Create Account</title>
@@ -71,6 +81,18 @@
     <p>Please enter info below:</p>
 
     <form id="createAccountFormId" class="white">
+
+        <!--EXPERIMENTAL WEBFLOW DESIGN. WIP.-->
+        <!--<div id=" formLabelsId" style="float:left">
+
+            <label style="float:left; box-sizing:border-box; width:10vh; margin:2vh;">First Name: </label>
+            <br>
+            <label style="float:left; clear:both; box-sizing:border-box;">Last Name: </label>
+            <label style="float:left; clear:both; box-sizing:border-box;">Email: </label>
+            <label style="float:left; clear:both; box-sizing:border-box;">Username: </label>
+            <label style="float:left; clear:both; box-sizing:border-box;">Password: </label>
+
+        </div>-->
 
         <br>
 
