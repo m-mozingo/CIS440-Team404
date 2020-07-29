@@ -30,28 +30,32 @@ namespace ProjectTemplate
         private string getConString()
         {
             return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName + "; UID=" + dbID + "; PASSWORD=" + dbPass;
+
         }
         ////////////////////////////////////////////////////////////////////////
 
-    
+
 
         /////////////////////////////////////////////////////////////////////////
         //don't forget to include this decoration above each method that you want
         //to be exposed as a web service!
 
+        string[][] data;
         [WebMethod(EnableSession = true)]
         /////////////////////////////////////////////////////////////////////////
-        public string[][] TestRetrieval()
-        { 
-            string[][] data;
-            try
-			{
-				string testQuery = "select * from Scenarios where scenarioID='S0002'";
+        ///
 
-				////////////////////////////////////////////////////////////////////////
-				///here's an example of using the getConString method!
-				////////////////////////////////////////////////////////////////////////
-				MySqlConnection con = new MySqlConnection(getConString());
+        public string[][] TestRetrieval(string query)
+        {
+
+            try
+            {
+                query = query.Replace("%20", " ");
+                string testQuery = query;
+                ////////////////////////////////////////////////////////////////////////
+                ///here's an example of using the getConString method!
+                ////////////////////////////////////////////////////////////////////////
+                MySqlConnection con = new MySqlConnection(getConString());
                 ////////////////////////////////////////////////////////////////////////
                 con.Open();
                 MySqlCommand cmd = new MySqlCommand(testQuery, con);
@@ -65,37 +69,38 @@ namespace ProjectTemplate
                 rdr = cmd.ExecuteReader();
                 data = new string[count][];
                 int fieldAmount = rdr.FieldCount;
-                for(int j =0; j<count; j++)
+                for (int j = 0; j < count; j++)
                 {
                     rdr.Read();
                     data[j] = new string[fieldAmount];
-                    for(int i = 0; i < fieldAmount; i++)
+                    for (int i = 0; i < fieldAmount; i++)
                     {
                         data[j][i] = Convert.ToString(rdr.GetValue(i));
                     }
                 }
                 rdr.Close();
                 con.Close();
+
                 return data;
+
             }
-			catch (Exception e)
-			{
+            catch (Exception e)
+            {
                 string[][] jaggedArray = new string[3][];
                 jaggedArray[0] = new string[] { e.Message };
                 return jaggedArray;
             }
-            
         }
         [WebMethod(EnableSession = true)]
         /////////////////////////////////////////////////////////////////////////
         public string TestEditing()
         {
-            
+
             try
             {
                 string testQuery = "UPDATE `summer2020group1`.`Scenarios` SET `scenarioText` = '1st test', `scenarioHeading` = '1st heading' WHERE (`scenarioID` = 's0001');";
                 MySqlConnection con = new MySqlConnection(getConString());
-                
+
                 con.Open();
                 MySqlCommand cmd = new MySqlCommand(testQuery, con);
                 cmd.ExecuteNonQuery();
@@ -104,11 +109,10 @@ namespace ProjectTemplate
             }
             catch (Exception e)
             {
-                
+
                 return e.Message;
             }
         }
-
         //EXAMPLE OF AN INSERT QUERY WITH PARAMS PASSED IN.  BONUS GETTING THE INSERTED ID FROM THE DB!
         [WebMethod]
         public void CreateAccount(string FirstName, string LastName, string Email, string Username, string Password, string Department)
@@ -140,7 +144,7 @@ namespace ProjectTemplate
             //opening the connection, telling our command to "executescalar" which says basically
             //execute the query and just hand me back the number the query returns (the ID, remember?).
             //don't forget to close the connection!
-            
+
             //we're using a try/catch so that if the query errors out we can handle it gracefully
             //by closing the connection and moving on
             try
@@ -253,6 +257,12 @@ namespace ProjectTemplate
             }
             sqlConnection.Close();
         }
-
     }
 }
+
+
+
+
+
+
+
