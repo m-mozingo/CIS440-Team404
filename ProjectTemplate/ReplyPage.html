@@ -9,21 +9,36 @@
 	<!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
 	<script type="text/javascript">
         
-        function returnHome(){
-            window.location.href = "HomePage.html";
-            window.location.assign("HomePage.html");
-        }
-        function reply() {
-            window.location.href = "ReplyPage.html";
-            window.location.assign("ReplyPage.html");
+        var queryString = decodeURIComponent(window.location.search);
+        
+        var strings = queryString.split(" ");
+        var scenID = strings[1]
+        scenarioQuery = "Select * from Scenarios where scenarioID = '" + scenID + "'";
+      
+        
+		function getScenText() {
+            var webMethod = "ProjectServices.asmx/TestRetrieval";
+            var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
+
+			//jQuery ajax method
+			$.ajax({
+				type: "POST",
+				url: webMethod,
+				data: parameters,
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (msg) {
+                    var data = msg.d;
+                    
+				},
+				error: function (e) {
+					alert("this code will only execute if javascript is unable to access the webservice");
+				}
+			});
         }
         window.onload = function () {
-            
-            var scenBox = document.getElementById("scenText");
-            var jsonText = localStorage.getItem("scenario");
-            var scenText = JSON.parse(jsonText)
-            console.log(scenText);
-            scenBox.innerHTML = scenText[1];
+            getScenText();
+            console.log(queryString)
         }
         
 	</script>
@@ -123,8 +138,9 @@
         
     </div>
     <div class="row">
+        <h1>Your Response:</h1>
+        <textarea class="bottom col-lg-12 col-md-12 col-sm-12"></textarea>
         <button onclick="javascript: reply()" id="replyButton">Reply</button>
-        <button onclick="javascript: returnHome()" id="returnButton">Return Home</button>
     </div>
 </body>
 </html >
