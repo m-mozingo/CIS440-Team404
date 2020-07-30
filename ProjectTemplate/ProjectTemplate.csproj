@@ -100,6 +100,7 @@
     <Content Include="HTML_Files\JavaScript.js" />
     <Content Include="LoginPage.html" />
     <Content Include="index.html" />
+    <Content Include="LoginPage.html" />
     <Content Include="ProjectServices.asmx" />
     <Content Include="ReplyPage.html" />
     <Content Include="ScenariosPage.html" />
