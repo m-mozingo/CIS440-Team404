@@ -5,6 +5,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        /*
+        var userPass;
+        function getCred() {
+            username = document.getElementById("usernameLoginId").value;
+
+            pass = document.getElementById("passwordLoginId").value
+            userPass = [username, pass]
+            getLogOn();
+        }
+        */
+        function getLogOn() {
+            var webMethod = "ProjectServices.asmx/Test";
+            var parameters = "{} ";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    console.log(data)
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+        /*
+        function getLogOn() {
+            var webMethod = "ProjectServices.asmx/LogOn";
+            var parameters = "{\"userPass\":\"" + encodeURI(userPass) + "\"} ";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    console.log(data)
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+        */
+    </script>
 
     <style>
 
@@ -38,7 +93,6 @@
         button {
             background-color: white;
         }
-
     </style>
 
         
@@ -62,7 +116,7 @@
 
         <br><br />
 
-        <button type="button" onclick="">Log On</button>
+        <button type="button" onclick="javascript: getLogOn()">Log On</button>
 
                 
 

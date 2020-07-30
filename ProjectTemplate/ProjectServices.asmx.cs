@@ -86,19 +86,19 @@ namespace ProjectTemplate
             }
             catch (Exception e)
             {
-                string[][] jaggedArray = new string[3][];
+                string[][] jaggedArray = new string[1][];
                 jaggedArray[0] = new string[] { e.Message };
                 return jaggedArray;
             }
         }
         [WebMethod(EnableSession = true)]
         /////////////////////////////////////////////////////////////////////////
-        public string TestEditing()
+        public string TestEditing(string query)
         {
 
             try
             {
-                string testQuery = "UPDATE `summer2020group1`.`Scenarios` SET `scenarioText` = '1st test', `scenarioHeading` = '1st heading' WHERE (`scenarioID` = 's0001');";
+                string testQuery = query;
                 MySqlConnection con = new MySqlConnection(getConString());
 
                 con.Open();
@@ -113,6 +113,63 @@ namespace ProjectTemplate
                 return e.Message;
             }
         }
+
+        [WebMethod(EnableSession = true)]
+        public string[][] Test(string logOnQuery)
+        {
+
+            try
+            {
+                logOnQuery = logOnQuery.Replace("%20", " ");
+                string testQuery = logOnQuery;
+                ////////////////////////////////////////////////////////////////////////
+                ///here's an example of using the getConString method!
+                ////////////////////////////////////////////////////////////////////////
+                MySqlConnection con = new MySqlConnection(getConString());
+                ////////////////////////////////////////////////////////////////////////
+                con.Open();
+                MySqlCommand cmd = new MySqlCommand(testQuery, con);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                int count = 0;
+                while (rdr.Read())
+                {
+                    count++;
+                }
+                rdr.Close();
+                rdr = cmd.ExecuteReader();
+                data = new string[count][];
+                int fieldAmount = rdr.FieldCount;
+                for (int j = 0; j < count; j++)
+                {
+                    rdr.Read();
+                    data[j] = new string[fieldAmount];
+                    for (int i = 0; i < fieldAmount; i++)
+                    {
+                        data[j][i] = Convert.ToString(rdr.GetValue(i));
+                    }
+                }
+                rdr.Close();
+                con.Close();
+                if (data.Length > 0)
+                {
+                    return data;
+                }
+                else
+                {
+                    string[][] jaggedArray = new string[1][];
+                    jaggedArray[0] = new string[] {"false"};
+                    return jaggedArray;
+                }
+
+            }
+            catch (Exception e)
+            {
+                string[][] jaggedArray = new string[1][];
+                jaggedArray[0] = new string[] { e.Message };
+                return jaggedArray;
+            }
+        }
+        /*
         //EXAMPLE OF AN INSERT QUERY WITH PARAMS PASSED IN.  BONUS GETTING THE INSERTED ID FROM THE DB!
         [WebMethod]
         public void CreateAccount(string FirstName, string LastName, string Email, string Username, string Password, string Department)
@@ -197,9 +254,14 @@ namespace ProjectTemplate
             return repeat;
 
         }
+        [WebMethod]
+        public bool LogOn(string[] userPass)
+        {   
 
-        public bool LogOn(string Username, string Password)
-        {
+            string Username = userPass[0];
+            string Password = userPass[1];
+            return true;
+            
             //LOGIC: pass the parameters into the database to see if an account
             //with these credentials exist.  If it does, then return true.  If
             //it doesn't, then return false
@@ -242,6 +304,7 @@ namespace ProjectTemplate
             }
             //return the result!
             return success;
+           
         }
 
         //EXAMPLE OF AN UPDATE QUERY
@@ -267,6 +330,7 @@ namespace ProjectTemplate
             }
             sqlConnection.Close();
         }
+        */
     }
 }
 
