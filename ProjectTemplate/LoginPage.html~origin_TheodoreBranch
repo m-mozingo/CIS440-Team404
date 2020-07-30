@@ -7,19 +7,17 @@
     <title>Login</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        /*
-        var userPass;
-        function getCred() {
-            username = document.getElementById("usernameLoginId").value;
-
-            pass = document.getElementById("passwordLoginId").value
-            userPass = [username, pass]
+        var userPassQuery;
+        function getCreds(){
+            var username = document.getElementById("usernameLoginId").value
+            var password = document.getElementById("passwordLoginId").value
+            userPassQuery = "select * from UserAccounts where Username = '" + username + "' and Password = '" + password + "'";
+            console.log(userPassQuery)
             getLogOn();
         }
-        */
         function getLogOn() {
             var webMethod = "ProjectServices.asmx/Test";
-            var parameters = "{} ";
+            var parameters = "{\"logOnQuery\":\"" + encodeURI(userPassQuery) + "\"} ";
 
             $.ajax({
                 type: "POST",
@@ -29,7 +27,16 @@
                 dataType: "json",
                 success: function (msg) {
                     var data = msg.d;
-                    console.log(data)
+                    var ifFalse = data[0][0]
+                    if (ifFalse == "false") {
+                        alert("Check your username and password")
+                    }
+                    else {
+                        localStorage.accountData = JSON.stringify(data);
+                        window.location.href = "HomePage.html";
+                        window.location.assign("HomePage.html");
+                    }
+                    
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
@@ -37,28 +44,7 @@
             });
 
         }
-        /*
-        function getLogOn() {
-            var webMethod = "ProjectServices.asmx/LogOn";
-            var parameters = "{\"userPass\":\"" + encodeURI(userPass) + "\"} ";
-
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    var data = msg.d;
-                    console.log(data)
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-
-        }
-        */
+        
     </script>
 
     <style>
@@ -95,8 +81,6 @@
         }
     </style>
 
-        
-
 </head>
 
 <body>
@@ -116,7 +100,7 @@
 
         <br><br />
 
-        <button type="button" onclick="javascript: getLogOn()">Log On</button>
+        <button type="button" onclick="javascript: getCreds()">Log On</button>
 
                 
 
