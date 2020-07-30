@@ -162,6 +162,12 @@ namespace ProjectTemplate
         }
 
         [WebMethod]
+        public void DeleteAccount()
+        {
+            string sqlQuery = "SELECT COUNT(Username) FROM `summer2020group1`.`UserAccounts` WHERE Username=@Username";
+        }
+
+        [WebMethod]
         public bool AccountValidate(string Username)
         {
 
@@ -209,6 +215,10 @@ namespace ProjectTemplate
 
             //set up our command object to use our connection, and our query
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            //command to change 'LoggedIn' value to 1
+            string sqlLoggedInQuery = "UPDATE `summer2020group1`.`UserAccounts` SET `LoggedIn` = '1' WHERE (`Username` = '@Username')"; 
+            MySqlCommand sqlLoginCommand = new MySqlCommand(sqlLoggedInQuery, sqlConnection);
 
             //tell our command to replace the @parameters with real values
             //we decode them because they came to us via the web so they were encoded

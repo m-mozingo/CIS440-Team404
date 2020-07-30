@@ -34,29 +34,59 @@
     </style>
 
 <script href="JavaScript.js"></script>
-    <script>
+<script>
 
-        function processForm(inputForm) {
+    function processForm(inputForm) {
 
-            //Form will not submit without all input forms completed
-            if (!inputForm.checkValidity()) {
-                alert("See highlighted input boxes, there are input errors!");
+        //Form will not submit without all input forms completed
+        if (!inputForm.checkValidity()) {
+            alert("See highlighted input boxes, there are input errors!");
+        }
+        else {
+
+            var fName = document.getElementById("fNameCreateId").value;
+            var lName = document.getElementById("lnameCreateId").value;
+            var mail = document.getElementById("mailCreateId").value;
+            var username = document.getElementById("usernameCreateId").value;
+            var pass = document.getElementById("passwordCreateId").value;
+            var department = document.getElementById("departmentId").value;
+
+            //WebService "AccountValidate" goes here
+            function CreateAccount(fName, lName, mail, username, pass, department) {
+
+                var webMethod = "ProjectServices.asmx/CreateAccount";
+                var parameters = "{\"userCount\":\"" + encodeURI(userCountValue) + "\"}";
+
+                //jQuery ajax method
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: parameters,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        var responseFromServer = msg.d;
+
+                        //alert(responseFromServer.firstName);
+                        //alert(responseFromServer.lastName);
+                        //alert(responseFromServer.phoneNumber);
+                        for (var i = 0; i < responseFromServer.length; i++) {
+                            alert(responseFromServer[i].firstName);
+                            alert(responseFromServer[i].lastName);
+                            alert(responseFromServer[i].phoneNumber);
+                        }
+
+                        doThisAfterServerStuff();
+                    },
+                    error: function (e) {
+                        alert("this code will only execute if javascript is unable to access the webservice");
+                    }
+                });
+
             }
-            else {
 
-                var fname = document.getElementById("fNameCreateId").value;
-                var lName = document.getElementById("lnameCreateId").value;
-                var mail = document.getElementById("mailCreateId").value;
-                var username = document.getElementById("usernameCreateId").value;
-                var pass = document.getElementById("passwordCreateId").value;
-                var department = document.getElementById("departmentId").value;
-
-                //WebService "AccountValidate" goes here
-                //AccountValidate(username)
-                //if (AccountValidate(username)) {
-
-                    // WebService "Create Account" goes here
-                    //CreateAccounts(fname, lName, mail, username, pass, department)
+            function doThisAfterServerStuff() {
+                alert("you thought this would execute after the code in my success function, didn't you?!?!");</script>
 
                     // alert("Account Created! Please continue by logging in")
 
