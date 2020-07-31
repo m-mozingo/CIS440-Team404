@@ -79,6 +79,26 @@
             scenBox.innerHTML = scenText[1];
         }
         /*onload once again sets the scen text as you saw before so the user can still see the scenario text*/
+
+        function showID() {
+            var ID = accData[0];
+            alert("Your account ID is: " + ID);
+        }
+
+        function showUsername() {
+            var username = accData[4];
+            alert("Your username is: " + username);
+        }
+
+        function logOut() {
+            if (confirm("Are you sure you want to sign out?")) {
+
+                delete accData[0][6];
+                window.location.href = "HomePage.html";
+                window.location.assign("HomePage.html");
+            }
+        }
+
 	</script>
 	<!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -165,15 +185,26 @@
             border-radius: 10px;
         }
         #replyButton{margin-left:80%; width:80px;}
+
+        button {
+            float: right;
+            margin-right:1%;
+        }
 	</style>
 	<!--END OF YOUR OWN CSS-->
 </head >
 <body>
-   
+
+    <div class="row" style="background-color:aquamarine;padding:1%">
+        <button onclick="logOut()">Logout</button>
+        <button onclick="showUsername()">Username</button>
+        <button onclick="showID()">ID</button>
+    </div>
+
     <div class="row">
         <h1>Scenario:</h1>
         <textarea class="top col-lg-12 col-md-12 col-sm-12" id="scenText" disabled> </textarea>
-        
+
     </div>
     <div class="row">
         <h1>Your Response:</h1>
