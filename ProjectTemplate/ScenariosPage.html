@@ -8,15 +8,27 @@
 
 	<!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
 	<script type="text/javascript">
-        
+        var accData;
         function returnHome(){
             window.location.href = "HomePage.html";
             window.location.assign("HomePage.html");
         }
+        /*following the design from the scenario page you can either reply or go home
+         this Return button function sends the user back to the home Page*/
         function reply() {
             window.location.href = "ReplyPage.html";
             window.location.assign("ReplyPage.html");
         }
+        /*following the design from the scenario page you can either reply or go home
+         this reply button function send the user the replyPage*/
+        function getAccount() {
+            var accountText = localStorage.getItem("accountData");
+            accData = JSON.parse(accountText)
+            console.log(accData)
+        }
+        /*this just pulls the account data
+         no use of it now but its ready if it need to be*/
+
         window.onload = function () {
             
             var scenBox = document.getElementById("scenText");
@@ -25,6 +37,10 @@
             console.log(scenText);
             scenBox.innerHTML = scenText[1];
         }
+        /*As always the onload will automatically run when the DOM is done loading in the browser
+         here we pull the scenario data stored in the local json folder and then set the scenario textarea element with the scenario text
+         the scenBox variable hold the element data while the scenText variable holds the json data
+         the 'scenBox.innerHTML = scenText[1]' is where the text is set*/
         
 	</script>
 	<!--END OF YOUR OWN JAVASCRIPT-->

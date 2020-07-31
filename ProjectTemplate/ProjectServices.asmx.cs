@@ -95,9 +95,11 @@ namespace ProjectTemplate
         /////////////////////////////////////////////////////////////////////////
         public string TestEditing(string query)
         {
-
+            
             try
             {
+                query = query.Replace("%20", " ");
+                query = query.Replace("%60", "`");
                 string testQuery = query;
                 MySqlConnection con = new MySqlConnection(getConString());
 
