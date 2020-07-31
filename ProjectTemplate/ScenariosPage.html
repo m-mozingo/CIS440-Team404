@@ -41,7 +41,26 @@
          here we pull the scenario data stored in the local json folder and then set the scenario textarea element with the scenario text
          the scenBox variable hold the element data while the scenText variable holds the json data
          the 'scenBox.innerHTML = scenText[1]' is where the text is set*/
-        
+
+        function showID() {
+            var ID = accData[0];
+            alert("Your account ID is: " + ID);
+        }
+
+        function showUsername() {
+            var username = accData[4];
+            alert("Your username is: " + username);
+        }
+
+        function logOut() {
+            if (confirm("Are you sure you want to sign out?")) {
+
+                delete accData[0][6];
+                window.location.href = "HomePage.html";
+                window.location.assign("HomePage.html");
+            }
+        }
+
 	</script>
 	<!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -132,11 +151,17 @@
 	<!--END OF YOUR OWN CSS-->
 </head >
 <body>
-   
+
+    <div class="row" style="background-color:aquamarine;padding:1%">
+        <button onclick="logOut()">Logout</button>
+        <button onclick="showUsername()">Username</button>
+        <button onclick="showID()">ID</button>
+    </div>
+
     <div class="row">
         <h1>Scenario:</h1>
         <textarea class="top col-lg-12 col-md-12 col-sm-12" id="scenText" disabled> </textarea>
-        
+
     </div>
     <div class="row">
         <button onclick="javascript: reply()" id="replyButton">Reply</button>
