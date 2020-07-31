@@ -9,16 +9,46 @@
 	<!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
 	<script type="text/javascript">
         
-        var queryString = decodeURIComponent(window.location.search);
-        
-        var strings = queryString.split(" ");
-        var scenID = strings[1]
-        scenarioQuery = "Select * from Scenarios where scenarioID = '" + scenID + "'";
-      
-        
-		function getScenText() {
-            var webMethod = "ProjectServices.asmx/TestRetrieval";
-            var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
+       
+        var responseQuery;
+        var accData;
+        var scenText;
+
+        function getAccount() {
+            var accountText = localStorage.getItem("accountData");
+            accData = JSON.parse(accountText)
+            console.log(accData)
+        }
+        /*gets account data from the json
+         is used in this page*/
+        function reply() {
+            var txt = document.getElementById("responseText").value
+            var userID = accData[0][0]
+            var scenID = scenText[0][0]
+            responseQuery = "INSERT INTO `summer2020group1`.`Response`(`userResponse`, `userID`, `scenarioID`) VALUES('" + txt + "', '" + userID + "', '" + scenID + "')";
+            if (txt != "") {
+                console.log("not empty")
+                sendReply();
+                alert("Reply Sent")
+                window.location.assign("HomePage.html");
+            }
+            else{
+                console.log("text empty")
+                alert("Please fill out the response text box")
+            }
+        }
+        /*runs when the reply button is pushed 
+         gets the text of the textarea element and stores it in the txt variable
+         it also get the accountID/current user and the scenID 
+         again this was pulled from the local json and the data was set from the log on page and the home page
+         responseQuery like the others sets the txt userId and scenId to get the query ready to go to the webmethod
+         the if statement checks if the txt variable is empty, and sends an alert if it is
+         if it isnt then the sendReply method is called which is the function that sends the query to the 'testEditing' web method which can execute insert queries
+         then alerts that the reply was sent*/
+
+		function sendReply() {
+            var webMethod = "ProjectServices.asmx/TestEditing";
+            var parameters = "{\"query\":\"" + encodeURI(responseQuery) + "\"} ";
 
 			//jQuery ajax method
 			$.ajax({
@@ -29,18 +59,26 @@
 				dataType: "json",
 				success: function (msg) {
                     var data = msg.d;
-                    
+                    console.log(data)
 				},
 				error: function (e) {
 					alert("this code will only execute if javascript is unable to access the webservice");
 				}
 			});
         }
+        /*the send reply is like everyother ajax method the only things changed is the parameter and the web method being called
+         the responsequery is sent and somewhere I need to send the user back to the home page
+         nothing is set up to deal with the return from the web method as long as it isnt an error message it most likely went through*/
+
         window.onload = function () {
-            getScenText();
-            console.log(queryString)
+            getAccount();
+            var scenBox = document.getElementById("scenText");
+            var jsonText = localStorage.getItem("scenario");
+            scenText = JSON.parse(jsonText)
+            console.log(scenText);
+            scenBox.innerHTML = scenText[1];
         }
-        
+        /*onload once again sets the scen text as you saw before so the user can still see the scenario text*/
 	</script>
 	<!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -139,8 +177,8 @@
     </div>
     <div class="row">
         <h1>Your Response:</h1>
-        <textarea class="bottom col-lg-12 col-md-12 col-sm-12"></textarea>
-        <button onclick="javascript: reply()" id="replyButton">Reply</button>
+        <textarea class="bottom col-lg-12 col-md-12 col-sm-12" id="responseText"></textarea>
+        <button onclick="javascript: reply()" id="replyButton">Send</button>
     </div>
 </body>
 </html >

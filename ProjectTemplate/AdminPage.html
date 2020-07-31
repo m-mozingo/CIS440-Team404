@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script>
+        var tabDefault = document.getElementById("tab");
+        function newScenario() {
+            var tabContent = document.getElementById("tab")
+            tabContent.appendChild(document.createElement("textarea");
+
+        }
+    </script>
+    <style>
+    * {
+    box-sizing: 		border-box;
+    }
+
+    /* For phones (portrait) unless another @media rule below is fired */
+    @media only screen and (max-width: 500px) {
+    .col-sm-00  {display: 		   none; }
+    .col-sm-06  {width: 		    50%; }
+    .col-sm-12 	{width: 		   100%; }
+    body 		{background-color: grey;}
+
+    }
+
+    /* For medium screens (e.g. landscape phones and portrait tablets) */
+    @media only screen and (min-width: 501px) {
+    .col-md-00  {display: 		   none; }
+    .col-md-01  {width: 		  8.33%; }
+    .col-md-02  {width: 		 16.66%; }
+    .col-md-03  {width: 		 25.00%; }
+    .col-md-04  {width: 		 33.33%; }
+    .col-md-05  {width: 		 41.66%; }
+    .col-md-06  {width: 		 50.00%; }
+    .col-md-07  {width: 		 58.33%; }
+    .col-md-08  {width: 		 66.66%; }
+    .col-md-09  {width: 		 75.00%; }
+    .col-md-10  {width: 		 83.33%; }
+    .col-md-11  {width: 		 91.66%; }
+    .col-md-12  {width: 		100.00%; }
+    body 		{background-color: lightgrey;}
+
+    }
+
+    /* For large screens or landscape tablets*/
+    @media only screen and (min-width: 1024px) {
+    .col-md-00  {display: 		initial; }
+    .col-sm-00  {display:       initial; }
+    .col-lg-01  {width: 		  8.33%; }
+    .col-lg-02  {width: 		 16.66%; }
+    .col-lg-03  {width: 		 25.00%; }
+    .col-lg-04  {width: 		 33.33%; }
+    .col-lg-05  {width: 		 41.66%; }
+    .col-lg-06  {width: 		 50.00%; }
+    .col-lg-07  {width: 		 58.33%; }
+    .col-lg-08  {width: 		 66.66%; }
+    .col-lg-09  {width: 		 75.00%; }
+    .col-lg-10 	{width: 		 83.33%; }
+    .col-lg-11 	{width: 		 91.66%; }
+    .col-lg-12 	{width: 		100.00%; }
+    body 		{background-color: white;}
+
+    }
+
+    [class*="col-"] {
+    float: 				left;
+
+    }
+
+    .row::after {
+    content: 			"";
+    clear: 				both;
+    display: 			block;
+    }
+
+    body {
+    font-family: 		sans-serif;
+    font-size: 			12px;
+    text-align: 		center;
+    }
+
+    .top {
+    height: 20vh;
+    border: solid 2px black;
+    }
+
+    .control {
+    height: 50vh;
+    border: solid 2px black;
+    }
+
+    #tab{
+        height:70vh;
+        border: solid 2px black;
+    }
+    .button{
+        height:9vh;
+        margin-bottom:1vh;
+    }
+    </style>
+</head>
+<body>
+    <div class="row top">
+        <div class="col-lg-12"><h1>Welcome *Admin</h1></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-02 control">
+            <div class="row"><button onclick="javascript: scenarioList()" class="button col-lg-12">Scenario List</button></div>
+            <div class="row"><button onclick="javascript: newScenario()" class="button col-lg-12">New Scenario</button></div>
+            <div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Manage Responses</button></div>
+            <div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Edit Users</button></div>
+            <div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Reports</button></div>
+        </div>
+        <div class="col-lg-10 " id="tab">
+
+        </div>
+
+    </div>
+</body>
+</html>
