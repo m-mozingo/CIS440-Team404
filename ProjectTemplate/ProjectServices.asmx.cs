@@ -169,6 +169,21 @@ namespace ProjectTemplate
                 return jaggedArray;
             }
         }
+
+        [WebMethod]
+        public void DeleteAccount(string ID) { 
+
+            string sqlQuery = "DELETE FROM summer2020group1.UserAccounts WHERE ID = @ID;";
+        
+            MySqlConnection con = new MySqlConnection(getConString());
+
+            con.Open();
+            MySqlCommand sqlCommand = new MySqlCommand(sqlQuery, con);
+
+            sqlCommand.Parameters.AddWithValue("@FirstName", HttpUtility.UrlDecode(ID));
+
+
+        }
         /*
         //EXAMPLE OF AN INSERT QUERY WITH PARAMS PASSED IN.  BONUS GETTING THE INSERTED ID FROM THE DB!
         [WebMethod]
