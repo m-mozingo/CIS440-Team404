@@ -55,7 +55,7 @@
          this will take the userPassQuery set before in the userCreds function and send it to the 'Test' web method 
          (the reason why the userPassQuery was declared outside so this method can access it with its changes from the getCreds function)
          the web method will do its thing, and will send a result back which is received in the variable 'var data = msg.d'
-         do to how the web method is programmed, the returned result should be an array of arrays with the data from the sql query we sent which was the userPassQuery
+         due to how the web method is programmed, the returned result should be an array of arrays with the data from the sql query we sent which was the userPassQuery
          the variable 'ifFalse' checks to see if the first index in the inner array of the first outer array was the string 'false'
          if it that is true that that means no record was found with both that username and password and an alert is shown saying user and pass was wrong. 
          if that wasn't true then the else will take the returned record from the web method, which is a users record with all columns selected from the database with that username and password

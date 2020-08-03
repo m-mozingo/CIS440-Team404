@@ -7,9 +7,42 @@
         var tabDefault = document.getElementById("tab");
         function newScenario() {
             var tabContent = document.getElementById("tab")
-            tabContent.appendChild(document.createElement("textarea");
-
+            tabContent.appendChild(document.createElement("textarea"));
         }
+
+        // scenario list tab: table filled with all scenarios
+        window.onload = function () {
+
+            // table tag identified
+            var table = document.getElementById("scenarioTable");
+     
+
+            scenarioQuery = "SELECT " + "scenarioText" + "FROM summer2020group1.Scenarios;";
+            var webMethod = "ProjectServices.asmx/TestRetrieval";
+            var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    data = msg.d;
+                    // WIP. Help appreciated. Trying to place scenarioText from database into Scenario tab
+                    console.log(data[1]);
+                    for (var i = 0; i < data.length; i++) {
+                        var row = table.insertRow();
+                        var cell = row.insertCell();
+                        cell.innerHTML = data[i];
+                    }
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
     </script>
     <style>
     * {
@@ -91,31 +124,90 @@
     border: solid 2px black;
     }
 
-    #tab{
-        height:70vh;
+    .tab{
+        height:50vh;
         border: solid 2px black;
     }
     .button{
         height:9vh;
         margin-bottom:1vh;
+        width:15vw;
+    }
+
+    button {
+        float:right;
+        margin:1%;
     }
     </style>
 </head>
 <body>
+    
+    <script>
+        //script required to go into body code block to work
+        function scenarioList() {
+            document.getElementById("scenarioCreateTab").setAttribute("hidden", true);
+            document.getElementById("scenarioListTab").removeAttribute("hidden");
+        }
+
+        function newScenario() {
+            document.getElementById("scenarioListTab").setAttribute("hidden", true);
+            document.getElementById("scenarioCreateTab").removeAttribute("hidden");
+        }
+    </script>
+    <div class="row" style="background-color:aquamarine;padding:1%">
+        <button onclick="logOut()">Logout</button>
+        <button>Points</button>
+        <button onclick="showUsername()">Username</button>
+        <button onclick="showID()">ID</button>
+    </div>
+
     <div class="row top">
         <div class="col-lg-12"><h1>Welcome *Admin</h1></div>
     </div>
+
     <div class="row">
         <div class="col-lg-02 control">
-            <div class="row"><button onclick="javascript: scenarioList()" class="button col-lg-12">Scenario List</button></div>
-            <div class="row"><button onclick="javascript: newScenario()" class="button col-lg-12">New Scenario</button></div>
-            <div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Manage Responses</button></div>
+            <div class="row"><button onclick="scenarioList()" class="button col-lg-12">Scenario List</button></div>
+            <div class="row"><button onclick="newScenario()" class="button col-lg-12">New Scenario</button></div>
+            <!--<div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Manage Responses</button></div>
             <div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Edit Users</button></div>
-            <div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Reports</button></div>
+            <div class="row"><button onclick="javascript: reply()" class="button col-lg-12">Reports</button></div>-->
+            <div class="row"></div>
         </div>
-        <div class="col-lg-10 " id="tab">
+
+        <!--Scenario List Tab-->
+        <div class="col-lg-12 tab" id="scenarioListTab" hidden>
+
+            <p class="row" style="width:79vw">Insert Scenario page here................</p>
+
+            <table id="scenarioTable"></table>
 
         </div>
+
+        <!--Scenario Create Tab-->
+        <div class="col-lg-12 tab row" id="scenarioCreateTab" hidden>
+
+            <p style="width:79vw">Enter new scenario and choose department:</p>
+
+            <textarea id="ScenarioInput" name="createScenarioInput" style="width:60vw; height:30vh; text-align:left;" cols="30" rows="10"></textarea>
+            <br>
+
+            <h1>Choose a Department</h1>
+            <select name="department" id="departments">
+                <option value="All">All</option>
+                <option value="Accounting">Accounting</option>
+                <option value="IT">IT</option>
+                <option value="HR" selected="selected">HR</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+
+            <br><br>
+
+            <button style="margin-right:40%;">Submit New Scenario</button>
+
+
+        </div>
+
 
     </div>
 </body>
