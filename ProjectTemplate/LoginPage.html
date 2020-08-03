@@ -39,6 +39,11 @@
                     if (ifFalse == "false") {
                         alert("Check your username and password")
                     }
+                    else if(data[0][8] == 1){
+                        localStorage.accountData = JSON.stringify(data);
+                        window.location.href = "AdminPage.html";
+                        window.location.assign("AdminPage.html");
+                    }
                     else {
                         localStorage.accountData = JSON.stringify(data);
                         window.location.href = "HomePage.html";

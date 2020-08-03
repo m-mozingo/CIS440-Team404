@@ -36,13 +36,7 @@
                     } 
             });
         }
-        /*The getScenario function will run when the get random scenario button is pushed
-         Whatever the departementQuery department is set as will be the query sent if the select list has not be changed,
-         the default department will be sent in the department variable of the department query.
-         The web method does its thing and once again we get data from the 'data = msg.d' from there we pull a random index from the outer array of returned records
-         this will choose what scenario record randomly
-         we then store that in local json and then move to the scenario page with the window.location lines
-         */
+       
         function getAccount() {
             var accountText = localStorage.getItem("accountData");
             accData = JSON.parse(accountText)
@@ -52,9 +46,7 @@
             department = accData[0][6]
             departmentQuery = "Select * from Scenarios where scenarioDepartment = '" + department + "'";
         }
-        /*the getAccount function pulls the account info from the local Json storage and sets in into accData 
-         This accData lets the account data be accessed by any function in the javascript
-         in this script, it will also get the default department of the logged in account and set the select list to that department and the query to have that department*/
+        
 
         window.onload = function () {
             getAccount();
@@ -67,15 +59,8 @@
                     departmentQuery = "Select * from Scenarios";
                     }
             }
-            /*This starts everything
-             First the getAccount() method is called - this gets the account data stored in json the was set by the loginPage
-             For some reason it wouldn't work if did it directly from this onload function so set it to its own function
-             then the onchange function for the department select list is set
-             this function will set the query that will be sent to the web services like in the log on page but for the all the scenarios with that department
-             when the select lists current selection changes (ie from marketing to finance)*/
+          
         }
-
-        
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
     <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
