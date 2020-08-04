@@ -94,12 +94,6 @@
     <Content Include="Global.asax" />
     <Content Include="HomePage.html" />
     <Content Include="VotingPage.html" />
-    <Content Include="HTML_Files\ChangePassword.html" />
-    <Content Include="HTML_Files\CreateAccount.html" />
-    <Content Include="HTML_Files\HomePage.html" />
-    <Content Include="HTML_Files\HowDoesThisWorkPage.html" />
-    <Content Include="HTML_Files\JavaScript.js" />
-    <Content Include="HTML_Files\LoginPage.html" />
     <Content Include="index.html" />
     <Content Include="LoginPage.html" />
     <Content Include="ProjectServices.asmx" />
