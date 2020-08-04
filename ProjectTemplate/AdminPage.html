@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var newQuery;
+        var scenarioQuery = "select * from Scenarios"
+        var queryType;
+        
+        function scenarioList() {
+           
+            var i, tabcontent
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById("scenarioList").style.display = "block";
+        }
+        function newScenario() {
+            var i, tabcontent
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById("newScenario").style.display = "block";
+            newTxt = document.getElementById("newScenText");
+        }
+
+        window.onload = function () {
+            var submit = document.getElementById("submit")
+            submit.onclick = function () {
+                var newTxt = document.getElementById("newScenTxt").value
+                var department = document.getElementById("departments").value;
+                var points = document.getElementById("points").value
+                var limit = document.getElementById("limit").value
+                newQuery = "INSERT INTO`summer2020group1`.`Scenarios`(`scenarioText`, `scenarioDepartment`, `pointValue`, `responseLimit`)"
+                newQuery = newQuery + "VALUES('" + newTxt + "', '" + department + "', " + points + ", " + limit + "); "
+                queryType = 0;
+                send();
+            }
+            var curlist = document.getElementById('scenList')
+            curlist.onchange = function () {
+                document.getElementById("scenSel").value = curlist.value
+            }
+            document.getElementById("scenButton").click();
+            getScenario();
+        }
+
+        function send() {
+            var webMethod = "ProjectServices.asmx/TestEditing";
+            var parameters = "{\"query\":\"" + encodeURI(newQuery) + "\"} ";
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    console.log(data)
+                    if (queryType == 0) {
+                        alert("Scenario was added!")
+                        getScenario();
+                    }
+                    else if (queryType == 1) {
+                        alert("Scenario was Deleted!")
+                        getScenario();
+                    }
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+        function getScenario() {
+            var webMethod = "ProjectServices.asmx/TestRetrieval";
+            var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    data = msg.d;
+                    list = document.getElementById('scenList')
+                    while (list.firstChild) {
+                        list.removeChild(list.firstChild);
+                    }
+                    list.size = data.length;
+                    for (i = 0; i < data.length; i++) {
+                        option = list.appendChild(document.createElement('option'))
+                        option.innerHTML = "ScenarioID:" + data[i][0] +"    Text: " + data[i][1] 
+                        option.value= data[i][0]
+                    }
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+        function remove(){
+            scenID = document.getElementById("scenSel").value
+            newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
+            queryType = 1;
+            send()
+        }
+        
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* For phones (portrait) unless another @media rule below is fired */
+        @media only screen and (max-width: 500px) {
+            .col-sm-00 {
+                display: none;
+            }
+
+            .col-sm-06 {
+                width: 50%;
+            }
+
+            .col-sm-12 {
+                width: 100%;
+            }
+
+            body {
+                background-color: grey;
+            }
+        }
+
+        /* For medium screens (e.g. landscape phones and portrait tablets) */
+        @media only screen and (min-width: 501px) {
+            .col-md-00 {
+                display: none;
+            }
+
+            .col-md-01 {
+                width: 8.33%;
+            }
+
+            .col-md-02 {
+                width: 16.66%;
+            }
+
+            .col-md-03 {
+                width: 25.00%;
+            }
+
+            .col-md-04 {
+                width: 33.33%;
+            }
+
+            .col-md-05 {
+                width: 41.66%;
+            }
+
+            .col-md-06 {
+                width: 50.00%;
+            }
+
+            .col-md-07 {
+                width: 58.33%;
+            }
+
+            .col-md-08 {
+                width: 66.66%;
+            }
+
+            .col-md-09 {
+                width: 75.00%;
+            }
+
+            .col-md-10 {
+                width: 83.33%;
+            }
+
+            .col-md-11 {
+                width: 91.66%;
+            }
+
+            .col-md-12 {
+                width: 100.00%;
+            }
+
+            body {
+                background-color: lightgrey;
+            }
+        }
+
+        /* For large screens or landscape tablets*/
+        @media only screen and (min-width: 1024px) {
+            .col-md-00 { display: initial;}
+            .col-sm-00 { display: initial;}
+            .col-lg-01 {  width: 8.33%; }
+            .col-lg-02 { width: 16.66%; }
+            .col-lg-03 {  width: 25.00%;  }
+            .col-lg-04 { width: 33.33%; }
+            .col-lg-05 { width: 41.66%;}
+            .col-lg-06 { width: 50.00%; }
+            .col-lg-07 { width: 58.33%;}
+            .col-lg-08 { width: 66.66%; }
+            .col-lg-09 { width: 75.00%; }
+            .col-lg-10 { width: 83.33%; }
+            .col-lg-11 {width: 91.66%;}
+            .col-lg-12 {width: 100.00%;}
+            body { background-color: white;}
+        }
+        [class*="col-"] { float: left; }
+        .row::after { content: "";  clear: both;  display: block; }
+        body { font-family: sans-serif;   font-size: 12px; text-align: center;}
+        .top { height: 20vh; border: solid 2px black;}
+        .control {height: 50vh; border: solid 2px black;}
+        .tab {height: 70vh;border: solid 2px black;}
+        .button { height: 9vh; margin-bottom: 1vh;}
+        .tabcontent { display: none; height: 70vh; }
+        #newScenTxt {height: 40vh;}
+        #scenList{height:50vh;}
+        #rspList{height:60vh;}
+        #userList{height:60vh;}
+        #scenList option {margin:0; padding:0; border:2px black solid; height:20px}
+    </style>
+</head>
+<body>
+    <div class="row top">
+        <div class="col-lg-12 col-md-12 col-sm-12" ><h1>Welcome *Admin</h1></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-02 control col-md-12 col-sm-12">
+            <div class="row"><button onclick="javascript: scenarioList()" class="button col-lg-12 col-md-12 col-sm-12" id="scenButton">Scenario List</button></div>
+            <div class="row"><button onclick="javascript: newScenario()" class="button col-lg-12 col-md-12 col-sm-12">New Scenario</button></div>
+            
+        </div>
+        <div class="col-lg-10 tab col-md-12 col-sm-12">
+            <div id="newScenario" class="tabcontent">
+                <div class="row">
+                    <h1>Scenario Text</h1>
+                </div>
+                <div class="row">
+                    <div class="col-lg-01 col-md-01"><p></p></div>
+                    <textarea class="col-lg-10 col-md-10  col-sm-12" id="newScenTxt"></textarea>
+                    <div class="col-lg-01 col-md-01"><p></p></div>
+                </div>
+                <div class="row">
+                    <label>Response Points</label>
+                    <input type="text" id="points" />
+                </div>
+                <div class="row">
+                    <label>Response Limit</label>
+                    <input type="text" id="limit" />
+                </div>
+                <div class="row">
+                    <label>Department</label>
+                    <select name="department" id="departments">
+                        <option value="Accounting">Accounting</option>
+                        <option value="IT">IT</option>
+                        <option value="HR">HR</option>
+                        <option value="Marketing">Marketing</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <input type="submit" id="submit" />
+                </div>
+            </div>
+            <div id="scenarioList" class="tabcontent">
+                <div>
+                    <h1>Scenario List</h1>
+                    <div class="row">
+                        <div class="col-lg-01"><p></p></div>
+                        <select id="scenList" class="col-lg-10 col-md-12 col-sm-12"></select>
+                        <div class="col-lg-01 row"><p></p></div>
+                    </div>
+                    <label>Selected Scenario:</label>
+                    <input type="text" id="scenSel" disabled />
+                    <button onclick="javascript: remove()">Delete</button>
+                </div>
+            </div>
+            <div id="responseList" class="tabcontent">
+                <div>
+                    <h1>Response List</h1>
+                    <div class="row">
+                        <div class="col-lg-01"><p></p></div>
+                        <select id="rspList" class="col-lg-10"></select>
+                        <div class="col-lg-01"><p></p></div>
+                    </div>
+                </div>
+            </div>
+            <div id="editList" class="tabcontent">
+                <div>
+                    <h1>Account List</h1>
+                    <div class="row">
+                        <div class="col-lg-01"><p></p></div>
+                        <select id="userList" class="col-lg-10"></select>
+                        <div class="col-lg-01"><p></p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

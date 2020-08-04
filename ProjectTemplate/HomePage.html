@@ -10,9 +10,10 @@
     <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
     <script type="text/javascript">
         var departmentQuery;
-        department = "HR";
-        departmentQuery = "Select * from Scenarios where scenarioDepartment = '" + department + "'";
-        function getScenarios() {
+        var accData;
+        var department;
+        
+        function getScenario() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(departmentQuery) + "\"} ";
             //jQuery ajax method
@@ -24,33 +25,39 @@
                 dataType: "json",
                 success: function (msg) {
                     data = msg.d;
-                    
-                    
-                    scens = document.getElementById("scenList")
-                    
-                    while (scens.firstChild) {
-                        scens.removeChild(scens.firstChild);
-                    }
-                    for (var i = 0; i < data.length; i++){
-                        newOption = scens.appendChild(document.createElement("option"));
-                        newOption.value = data[i][0];
-                        newLink = newOption.appendChild(document.createElement("a"))
-                        newLink.href = "ScenariosPage";
-                        newLink.target ="_blank";
-                        newOption.text = data[i][0] + " " + data[i][2];
-                    }
+                    var random = Math.floor(Math.random() * data.length);
+                    console.log(data[random])
+                    localStorage.scenario = JSON.stringify(data[random])
+                    window.location.href = "ScenariosPage.html";
+                    window.location.assign("ScenariosPage.html");
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
-                    }
-                  
+                    } 
             });
-           
         }
-        var scenID;
-        window.onload = function () {
-            getScenarios();
+        /*The getScenario function will run when the get random scenario button is pushed
+         Whatever the departementQuery department is set as will be the query sent if the select list has not be changed,
+         the default department will be sent in the department variable of the department query.
+         The web method does its thing and once again we get data from the 'data = msg.d' from there we pull a random index from the outer array of returned records
+         this will choose what scenario record randomly
+         we then store that in local json and then move to the scenario page with the window.location lines
+         */
+        function getAccount() {
+            var accountText = localStorage.getItem("accountData");
+            accData = JSON.parse(accountText)
+            console.log(accData[0][6])
             deps = document.getElementById("departments");
+            deps.value = accData[0][6]
+            department = accData[0][6]
+            departmentQuery = "Select * from Scenarios where scenarioDepartment = '" + department + "'";
+        }
+        /*the getAccount function pulls the account info from the local Json storage and sets in into accData 
+         This accData lets the account data be accessed by any function in the javascript
+         in this script, it will also get the default department of the logged in account and set the select list to that department and the query to have that department*/
+
+        window.onload = function () {
+            getAccount();
             deps.onchange = function () {
                 department = deps.value;
                 if (department != "All") {
@@ -59,23 +66,34 @@
                 else {
                     departmentQuery = "Select * from Scenarios";
                     }
-                getScenarios();
             }
-            scens = document.getElementById("scenList")
-            scens.onchange = function () {
-                var queryString = "?para1=" + " " + scens.value
-                window.location.href = "ScenariosPage.html" + queryString;
-                
+            /*This starts everything
+             First the getAccount() method is called - this gets the account data stored in json the was set by the loginPage
+             For some reason it wouldn't work if did it directly from this onload function so set it to its own function
+             then the onchange function for the department select list is set
+             this function will set the query that will be sent to the web services like in the log on page but for the all the scenarios with that department
+             when the select lists current selection changes (ie from marketing to finance)*/
+        }
+
+        function showID() {
+            var ID = accData[0];
+            alert("Your account ID is: " + ID);
+        }
+
+        function showUsername() {
+            var username = accData[4];
+            alert("Your username is: " + username);
+        }
+
+        function logOut() {
+            if (confirm("Are you sure you want to sign out?")) {
+
+                delete accData[0][6];
+                window.location.href = "HomePage.html";
+                window.location.assign("HomePage.html");
             }
         }
-       function getRandom() {
-                scens = document.getElementById("scenList");
-                var length = scens.length;
-                var index = Math.floor(Math.random() * length);
-                scens.selectedIndex = index;
-                var queryString = "?para1=" + " " + scens.value;
-                window.location.assign("ScenariosPage.html" + queryString)
-        }
+
         
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
@@ -150,8 +168,13 @@
 			text-align: 		center;
 		}
 
-        .top{height:20vh; background-color:green;}
-        .topleft{height:20vh; background-color:firebrick}
+        button {
+            float: right;
+            margin-right: 1%;
+        }
+
+        .top{height:35vh; background-color:green;}
+        .topleft{height:35vh; background-color:firebrick}
         .button{width:100%; height:10vh;  border-radius:10px;border:solid 2px black; margin:0px;}
         #scenList{width:100%; background-color:white;border:solid 2px black; border-radius:10px;}
         #scenList option{font-size:24px; border:solid 2px black; border-radius:10px;}
@@ -162,6 +185,13 @@
     <link rel="shortcut icon" href="">
 </head>
 <body>
+
+    <div class="row" style="background-color:aquamarine;padding:1%">
+        <button onclick="logOut()">Logout</button>
+        <button>Points</button>
+        <button onclick="showUsername()">Username</button>
+        <button onclick="showID()">ID</button>
+    </div>
     <div class="row">
         <div class="col-lg-03 col-md-04 col-sm-06 topleft">
             <h1>Choose a Department</h1>
@@ -178,14 +208,10 @@
 
 
     <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 "><button onclick="javascript: getRandom();" class="button"><h1>Get Random Scenario</h1></button></div>
-        <h1 class="selectHead col-lg-12 col-md-12 col-sm-12">Scenarios List</h1>
+        <div class="col-lg-12 col-md-12 col-sm-12 "><button onclick="javascript: getScenario();" class="button"><h1>Request Random Scenario</h1></button></div>
+        <div class="col-lg-12 col-md-12 col-sm-12"><button onclick="javascript: getLogOn()" class="button"><h1>Vote on Scenario Respone</h1></button></div>
 
     </div>
-    <div class="row">
-        <select name="scenariolist" id="scenList" size="30" class="col-lg-12 col-md-12 col-sm-12"></select>
-    </div>
-
 
 
 

@@ -8,39 +8,77 @@
 
 	<!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
 	<script type="text/javascript">
+        
+       
+        var responseQuery;
         var accData;
-        function returnHome(){
-            window.location.href = "HomePage.html";
-            window.location.assign("HomePage.html");
-        }
-        /*following the design from the scenario page you can either reply or go home
-         this Return button function sends the user back to the home Page*/
-        function reply() {
-            window.location.href = "ReplyPage.html";
-            window.location.assign("ReplyPage.html");
-        }
-        /*following the design from the scenario page you can either reply or go home
-         this reply button function send the user the replyPage*/
+        var scenText;
+
         function getAccount() {
             var accountText = localStorage.getItem("accountData");
             accData = JSON.parse(accountText)
             console.log(accData)
         }
-        /*this just pulls the account data
-         no use of it now but its ready if it need to be*/
+        /*gets account data from the json
+         is used in this page*/
+        function reply() {
+            var txt = document.getElementById("responseText").value
+            var userID = accData[0][0]
+            var scenID = scenText[0][0]
+            responseQuery = "INSERT INTO `summer2020group1`.`Response`(`userResponse`, `userID`, `scenarioID`) VALUES('" + txt + "', '" + userID + "', '" + scenID + "')";
+            if (txt != "") {
+                console.log("not empty")
+                sendReply();
+                alert("Reply Sent")
+                window.location.assign("HomePage.html");
+            }
+            else{
+                console.log("text empty")
+                alert("Please fill out the response text box")
+            }
+        }
+        /*runs when the reply button is pushed 
+         gets the text of the textarea element and stores it in the txt variable
+         it also get the accountID/current user and the scenID 
+         again this was pulled from the local json and the data was set from the log on page and the home page
+         responseQuery like the others sets the txt userId and scenId to get the query ready to go to the webmethod
+         the if statement checks if the txt variable is empty, and sends an alert if it is
+         if it isnt then the sendReply method is called which is the function that sends the query to the 'testEditing' web method which can execute insert queries
+         then alerts that the reply was sent*/
+
+		function sendReply() {
+            var webMethod = "ProjectServices.asmx/TestEditing";
+            var parameters = "{\"query\":\"" + encodeURI(responseQuery) + "\"} ";
+
+			//jQuery ajax method
+			$.ajax({
+				type: "POST",
+				url: webMethod,
+				data: parameters,
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (msg) {
+                    var data = msg.d;
+                    console.log(data)
+				},
+				error: function (e) {
+					alert("this code will only execute if javascript is unable to access the webservice");
+				}
+			});
+        }
+        /*the send reply is like everyother ajax method the only things changed is the parameter and the web method being called
+         the responsequery is sent and somewhere I need to send the user back to the home page
+         nothing is set up to deal with the return from the web method as long as it isnt an error message it most likely went through*/
 
         window.onload = function () {
-            
+            getAccount();
             var scenBox = document.getElementById("scenText");
             var jsonText = localStorage.getItem("scenario");
-            var scenText = JSON.parse(jsonText)
+            scenText = JSON.parse(jsonText)
             console.log(scenText);
             scenBox.innerHTML = scenText[1];
         }
-        /*As always the onload will automatically run when the DOM is done loading in the browser
-         here we pull the scenario data stored in the local json folder and then set the scenario textarea element with the scenario text
-         the scenBox variable hold the element data while the scenText variable holds the json data
-         the 'scenBox.innerHTML = scenText[1]' is where the text is set*/
+        /*onload once again sets the scen text as you saw before so the user can still see the scenario text*/
 
         function showID() {
             var ID = accData[0];
@@ -147,6 +185,11 @@
             border-radius: 10px;
         }
         #replyButton{margin-left:80%; width:80px;}
+
+        button {
+            float: right;
+            margin-right:1%;
+        }
 	</style>
 	<!--END OF YOUR OWN CSS-->
 </head >
@@ -164,8 +207,9 @@
 
     </div>
     <div class="row">
-        <button onclick="javascript: reply()" id="replyButton">Reply</button>
-        <button onclick="javascript: returnHome()" id="returnButton">Return Home</button>
+        <h1>Your Response:</h1>
+        <textarea class="bottom col-lg-12 col-md-12 col-sm-12" id="responseText"></textarea>
+        <button onclick="javascript: reply()" id="replyButton">Send</button>
     </div>
 </body>
 </html >

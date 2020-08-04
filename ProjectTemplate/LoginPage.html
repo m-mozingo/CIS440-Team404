@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var userPassQuery;
+        function getCreds() {
+            var username = document.getElementById("usernameLoginId").value
+            var password = document.getElementById("passwordLoginId").value
+            userPassQuery = "select * from UserAccounts where Username = '" + username + "' and Password = '" + password + "'";
+            console.log(userPassQuery)
+            getLogOn();
+        }
+        /*This runs when the log on button is pushed
+         it sets the data from the username and password input elements to the username and password javasript variables
+         userPassQuery declared outside of the functions scope at the top, its the query that will be sent to the web-services page through the 'Test' webmethods paramater (string logOnQuery)
+         it will set the username and password into it getting ready to be sent
+         the console.log was just for testing purposes
+         the getLogOn function in this script is then called
+         */
+
+        function getLogOn() {
+            var webMethod = "ProjectServices.asmx/Test";
+            var parameters = "{\"logOnQuery\":\"" + encodeURI(userPassQuery) + "\"} ";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    var ifFalse = data[0][0]
+                    if (ifFalse == "false") {
+                        alert("Check your username and password")
+                    }
+                    else {
+                        localStorage.accountData = JSON.stringify(data);
+                        window.location.href = "HomePage.html";
+                        window.location.assign("HomePage.html");
+                    }
+                    
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+        /*this is the function that deals with the web method and is call from the getCreds() function
+         this will take the userPassQuery set before in the userCreds function and send it to the 'Test' web method 
+         (the reason why the userPassQuery was declared outside so this method can access it with its changes from the getCreds function)
+         the web method will do its thing, and will send a result back which is received in the variable 'var data = msg.d'
+         due to how the web method is programmed, the returned result should be an array of arrays with the data from the sql query we sent which was the userPassQuery
+         the variable 'ifFalse' checks to see if the first index in the inner array of the first outer array was the string 'false'
+         if it that is true that that means no record was found with both that username and password and an alert is shown saying user and pass was wrong. 
+         if that wasn't true then the else will take the returned record from the web method, which is a users record with all columns selected from the database with that username and password
+         to local JSON storage to be accessed by other pages
+         then the window.location lines will send the user to the homepage*/ 
+        
+    </script>
+
+    <style>
+
+        * {
+            background-color: bisque;
+            text-align: center;
+        }
+
+        input {
+            text-align: left;
+            background-color: white;
+        }
+
+        label {
+            padding-right: 5px;
+            background-color: white;
+        }
+
+        #loginFormId {
+            border: solid black;
+            background-color: white;
+            height: 125px;
+            margin-left: 350px;
+            margin-right: 350px;
+        }
+
+        .white * {
+            background-color: white;
+        }
+
+        button {
+            background-color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Login</h1>
+
+    <form id="loginFormId">
+
+        <br>
+
+        <label>Username: </label>
+        <input id="usernameLoginId" type="text" value="">
+
+        <br /><br />
+
+        <label>Password :</label>
+        <input id="passwordLoginId" type="text" value="">
+
+        <br><br />
+
+        <button type="button" onclick="javascript: getCreds()">Log On</button>
+
+                
+
+    </form>
+
+    <br />
+
+    <a href="file:///C:/Users/baden/OneDrive/Desktop/CIS%20440%20Project/CreateAccount/CreateAccount.html">Create Account</a>
+    <br><br>
+    <a href="">Password Reset</a>
+
+</body>
+
+</html>
