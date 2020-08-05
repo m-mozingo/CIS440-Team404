@@ -3,10 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <title>How Does This Work?</title>
+
+    <script>
+        function returnHomepage() {
+            window.location.href = "HomePage.html";
+            window.location.assign("HomePage.html");
+        }
+    </script>
+
     <style>
         * {
             text-align:center;
             background-color:bisque;
+        }
+
+        p {
+            border:inset;
+            background-color:beige;
         }
     </style>
 </head>
@@ -14,9 +27,26 @@
 
     <h1>How does this Work?</h1>
 
-    <p style="border:inset; background-color:beige;">lorem ipsum</p>
+    <p>
+        This employee response system is meant to provide scenarios that you may or may not face in the workplace.  These short scenarios have been identified by management and ownership as areas that need improvement.
 
-    <a href="">Return to Homescreen</a>
+        Who better to help improve the work environment than those who have to work within the environment to be successful?
+
+        Once logged in you will have the opportunity to respond to a randomly chosen scenario.  If you do this a short scenario will be provided with space for you to respond.  Each scenario has an assigned point value.  Once you have completed your response and submit, the point value will be added to your overall total.  Point totals will be discussed in a bit.
+
+        The other option you have is to get a scenario that has been responded to and the total responses before the scenario was locked.  At that point you will be given the option to blind vote on the provided responses.  Each vote will be worth 1 point.  This will report back to management and ownership to help gauge the response to the given scenario and give an idea of how well received a solution to a problem will be.
+
+    </p>
+
+    <p>
+        REWARDS:
+
+        Remember those point totals?  You will be able to see your current point total on your home screen.  As a reward for your time and effort there are certain prizes you can redeem your points for.  These rewards can range from a starbucks gift card to an 8 hour PTO day of your choice.  Prizes will rotate and Ownership can change/update/modify the prizes at any time!
+
+        All responses and votes are anonymous so do not fear judgement or retaliation.  Above everything else be honest and genuine because this system is intended to improve your workplace environment as well as those around you.  Have fun with scenarios!
+    </p>
+
+    <a onclick="returnHomepage()">Return to Homescreen</a>
 
 </body>
 </html>
