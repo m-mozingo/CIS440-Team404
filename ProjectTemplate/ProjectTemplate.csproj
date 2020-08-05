@@ -93,6 +93,7 @@
     <Content Include="AdminPage.html" />
     <Content Include="Global.asax" />
     <Content Include="HomePage.html" />
+    <Content Include="HowDoesThisWorkPage.html" />
     <Content Include="VotingPage.html" />
     <Content Include="index.html" />
     <Content Include="LoginPage.html" />
