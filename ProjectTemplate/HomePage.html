@@ -89,11 +89,20 @@
             if (confirm("Are you sure you want to sign out?")) {
 
                 delete accData[0][6];
-                window.location.href = "HomePage.html";
-                window.location.assign("HomePage.html");
+                window.location.href = "LoginPage.html";
+                window.location.assign("LoginPage.html");
             }
+
         }
 
+        function resetPassPage() {
+            window.location.href = "PasswordResetPage.html";
+            window.location.assign("PasswordResetPage.html");
+        }
+
+        window.onload function() {
+
+        }
         
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
@@ -188,6 +197,7 @@
 
     <div class="row" style="background-color:aquamarine;padding:1%">
         <button onclick="logOut()">Logout</button>
+        <button onclick="resetPassPage()">Reset Password</button>
         <button>Points</button>
         <button onclick="showUsername()">Username</button>
         <button onclick="showID()">ID</button>
