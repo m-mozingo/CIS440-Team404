@@ -9,8 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        var scenarioQuery = "select * from scenarios where isLocked = 'true'"
-        var replyQuery = "select * from reponse where scenarioID = "
+        var scenarioQuery = "select * from Scenarios"
+        var replyQuery = "select * from Response where scenarioID = "
+        var voteQuery;
+        var accData;
+        var scenID
+        function getAccount() {
+            var accountText = localStorage.getItem("accountData");
+            accData = JSON.parse(accountText)
+            console.log(accData)
+        }
         function getScenarios() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
@@ -28,7 +36,7 @@
                     newTxt = document.getElementById("scenText")
                     newTxt.value = data[random][1]
                     replyQuery = replyQuery + scenID
-                    getReplies();
+                    getReplies()
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
@@ -47,12 +55,66 @@
                 dataType: "json",
                 success: function (msg) {
                     data = msg.d;
-                    
+                    console.log(data)
+                    list = document.getElementById('responseList')
+                    while (list.firstChild) {
+                        list.removeChild(list.firstChild);
+                    }
+                    list.size = data.length;
+                    for (i = 0; i < data.length; i++) {
+                        option = list.appendChild(document.createElement('option'))
+                        option.innerHTML = "ResponseID:" + data[i][0] + "    Text: " + data[i][1]
+                        option.value = data[i][0]
+                    }
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
+        }
+        window.onload = function () {
+            getScenarios()
+            var curlist = document.getElementById('responseList')
+            curlist.onchange = function () {
+                document.getElementById("respSel").value = curlist.value
+            }
+            getAccount()
+        }
+        function vote() {
+            voteQuery = "INSERT INTO`summer2020group1`.`VoteTable`(`scenarioID`, `responseID`, `userID`) VALUES(" + scenID + ", " + document.getElementById("respSel").value + ", " + accData[0][0] + ")";
+            if (document.getElementById("respSel").value == "") {
+                alert("Please select a response for top response!")
+            }
+            else {
+                send()
+                
+            }
+        }
+        function send() {
+            var webMethod = "ProjectServices.asmx/TestEditing";
+            var parameters = "{\"query\":\"" + encodeURI(voteQuery) + "\"} ";
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    alert("Your vote has been sent!")
+                    window.location.href = "HomePage.html";
+                    window.location.assign("HomePage.html");
+                 
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+        function returnHome() {
+            window.location.href = "HomePage.html";
+            window.location.assign("HomePage.html");
         }
     </script>
     <style>
@@ -125,15 +187,16 @@
 			text-align: 		center;
 		}
         .top {
-            height: 30vh;
+            height: 20vh;
             border: solid 2px black;
             border-radius: 10px;
         }
         .bottom {
-            height: 50vh;
+            height: 40vh;
             border: solid 2px black;
             border-radius: 10px;
         }
+        #responseList option {margin:0; padding:0; border:1px grey dashed; height:20px}
     </style>
 </head>
 <body>
@@ -145,6 +208,10 @@
     <div class="row">
         <h1>Responses:</h1>
         <select id="responseList" class="bottom col-lg-12"></select>
+        <label>Selected Response:</label>
+        <input type="text" id="respSel" disabled />
+        <button onclick="javascript: vote()">Vote as Top Response</button>
+        <button onclick="javascript: returnHome()">Return Home</button>
     </div>
 
 </body>
