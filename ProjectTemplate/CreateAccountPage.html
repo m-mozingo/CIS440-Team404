@@ -33,15 +33,19 @@
     </style>
 
     <script href="JavaScript.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
     <script>
 
-        function processForm(form) {
+        function processForm(inputForm) {
 
             if (!inputForm.checkValidity()) {
                 alert("See highlighted input boxes, there are input errors!");
             }
 
             else {
+
+                // variables from form retrieved
                 var fName = document.getElementById("fNameCreateId").value;
                 var lName = document.getElementById("lnameCreateId").value;
                 var mail = document.getElementById("mailCreateId").value;
@@ -49,12 +53,14 @@
                 var pass = document.getElementById("passwordCreateId").value;
                 var department = document.getElementById("departmentId").value;
 
+                // query sent to database
                 var createAccQuery = "INSERT INTO `summer2020group1`.`UserAccounts` (`FirstName`, `LastName`, `Email`, `Username`, `Password`, `Department`) VALUES ('" + fName + "'," + lName + "'," + mail + "'," + username + "'," + pass + "'," + department + "');";
-"
+
 
                 var webMethod = "ProjectServices.asmx/TestEditing";
                 var parameters = "{\"query\":\"" + encodeURI(createAccQuery) + "\"} ";
                 //jQuery ajax method
+                //NOT WORKING
                 $.ajax({
                     type: "POST",
                     url: webMethod,
@@ -72,9 +78,11 @@
                 });
 
             }
+        }
 
-            
+
     </script>
+
 
     <title>Create Account</title>
 </head>
