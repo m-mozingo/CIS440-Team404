@@ -98,7 +98,10 @@
                 window.location.assign("HomePage.html");
             }
         }
-
+        function returnHome(){
+            window.location.href = "HomePage.html";
+            window.location.assign("HomePage.html");
+        }
 	</script>
 	<!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -210,6 +213,7 @@
         <h1>Your Response:</h1>
         <textarea class="bottom col-lg-12 col-md-12 col-sm-12" id="responseText"></textarea>
         <button onclick="javascript: reply()" id="replyButton">Send</button>
+        <button onclick="javascript: returnHome()" id="homeButton">Return Home</button>
     </div>
 </body>
 </html >
