@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        * {
+            background-color: bisque;
+            text-align: center;
+        }
+
+        input {
+            text-align: left;
+        }
+
+        label {
+            padding-right: 5px;
+        }
+
+        #createAccountFormId {
+            border: solid black;
+            background-color: white;
+            height: 300px;
+            margin-left: 300px;
+            margin-right: 300px;
+        }
+
+        .white * {
+            background-color: white;
+        }
+    </style>
+
+    <script href="JavaScript.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script>
+
+        function processForm(inputForm) {
+
+            if (!inputForm.checkValidity()) {
+                alert("See highlighted input boxes, there are input errors!");
+            }
+
+            else {
+
+                // variables from form retrieved
+                var fName = document.getElementById("fNameCreateId").value;
+                var lName = document.getElementById("lnameCreateId").value;
+                var mail = document.getElementById("mailCreateId").value;
+                var username = document.getElementById("usernameCreateId").value;
+                var pass = document.getElementById("passwordCreateId").value;
+                var department = document.getElementById("departmentId").value;
+
+                // query sent to database
+                var createAccQuery = "INSERT INTO `summer2020group1`.`UserAccounts` (`FirstName`, `LastName`, `Email`, `Username`, `Password`, `Department`) VALUES ('" + fName + "'," + lName + "'," + mail + "'," + username + "'," + pass + "'," + department + "');";
+
+
+                var webMethod = "ProjectServices.asmx/TestEditing";
+                var parameters = "{\"query\":\"" + encodeURI(createAccQuery) + "\"} ";
+                //jQuery ajax method
+                //NOT WORKING
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: parameters,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        alert("Account created! Returning to login.")
+                        window.location.href = "LoginPage.html";
+                        window.location.assign("LoginPage.html");
+                    },
+                    error: function (e) {
+                        alert("this code will only execute if javascript is unable to access the webservice");
+                    }
+                });
+
+            }
+        }
+
+
+    </script>
+
+
+    <title>Create Account</title>
+</head>
+<body>
+
+    <h1>Create Account</h1>
+
+    <p>Please enter info below:</p>
+
+    <form id="createAccountFormId" class="white">
+
+        <br>
+
+        <label>First Name: </label>
+        <input id="fNameCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Last Name: </label>
+        <input id="lnameCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Email: </label>
+        <input id="mailCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Username: </label>
+        <input id="usernameCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Password: </label>
+        <input id="passwordCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Department: </label>
+        <select name="department" id="departmentId">
+            <option disabled selected> -- Select an option -- </option>
+            <option value="Accounting">Accounting</option>
+            <option value="Logistics">Logistics</option>
+            <option value="Management">Management</option>
+        </select>
+
+        <br><br>
+
+        <!-- Sends data to database -->
+        <button type="button" onclick="processForm(this.form)">Register</button>
+
+    </form>
+
+
+</body>
+</html>
