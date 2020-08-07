@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
+    <script type="text/javascript">
+        var departmentQuery;
+        department = "HR";
+        departmentQuery = "Select * from Scenarios where scenarioDepartment = '" + department + "'";
+        function getScenario() {
+            var webMethod = "ProjectServices.asmx/TestRetrieval";
+            var parameters = "{\"query\":\"" + encodeURI(departmentQuery) + "\"} ";
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    data = msg.d;
+                    var random = Math.floor(Math.random() * data.length);
+                    console.log(data[random])
+                    localStorage.scenario = JSON.stringify(data[random])
+                    
+                    window.location.href = "ScenariosPage.html";
+                    window.location.assign("ScenariosPage.html");
+                    
+       
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                    }
+                  
+            });
+           
+        }
+        var scenID;
+        window.onload = function () {
+            deps = document.getElementById("departments");
+            deps.onchange = function () {
+                department = deps.value;
+                if (department != "All") {
+                    departmentQuery = "Select * from Scenarios where scenarioDepartment = '" + department + "'";
+                    }
+                else {
+                    departmentQuery = "Select * from Scenarios";
+                    }
+            }
+           
+        }
+        function getLogOn() {
+            var webMethod = "ProjectServices.asmx/Test";
+            var parameters = "{} ";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    console.log(data)
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+        
+    </script>
+    <!--END OF YOUR OWN JAVASCRIPT-->
+    <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
+    <style>
+		* {
+			box-sizing: 		border-box;
+		}
+
+		/* For phones (portrait) unless another @media rule below is fired */
+		@media only screen and (max-width: 500px) {
+			.col-sm-00  {display: 		   none; }
+            .col-sm-06  {width: 		    50%; }
+			.col-sm-12 	{width: 		   100%; }
+			body 		{background-color: black;}
+			
+		}
+
+		/* For medium screens (e.g. landscape phones and portrait tablets) */
+		@media only screen and (min-width: 501px) {
+			.col-md-00  {display: 		   none; }
+			.col-md-01  {width: 		  8.33%; }
+			.col-md-02  {width: 		 16.66%; }
+			.col-md-03  {width: 		 25.00%; }
+			.col-md-04  {width: 		 33.33%; }
+			.col-md-05  {width: 		 41.66%; }
+			.col-md-06  {width: 		 50.00%; }
+			.col-md-07  {width: 		 58.33%; }
+			.col-md-08  {width: 		 66.66%; }
+			.col-md-09  {width: 		 75.00%; }
+			.col-md-10  {width: 		 83.33%; }
+			.col-md-11  {width: 		 91.66%; }
+			.col-md-12  {width: 		100.00%; }
+			body 		{background-color: grey;}
+			
+		}
+
+		/* For large screens or landscape tablets*/		
+		@media only screen and (min-width: 1024px) {
+			.col-md-00  {display: 		initial; }
+			.col-sm-00  {display:       initial; }
+			.col-lg-01  {width: 		  8.33%; }
+			.col-lg-02  {width: 		 16.66%; }
+			.col-lg-03  {width: 		 25.00%; }
+			.col-lg-04  {width: 		 33.33%; }
+			.col-lg-05  {width: 		 41.66%; }
+			.col-lg-06  {width: 		 50.00%; }
+			.col-lg-07  {width: 		 58.33%; }
+			.col-lg-08  {width: 		 66.66%; }
+			.col-lg-09  {width: 		 75.00%; }
+			.col-lg-10 	{width: 		 83.33%; }
+			.col-lg-11 	{width: 		 91.66%; }
+			.col-lg-12 	{width: 		100.00%; }
+			body 		{background-color: white;}
+			
+		}
+
+		[class*="col-"] {
+			float: 				left;
+			
+		}
+
+		.row::after {
+			content: 			"";
+			clear: 				both;
+			display: 			block;
+		}
+
+		body {
+			font-family: 		sans-serif;
+			font-size: 			12px;		
+			text-align: 		center;
+		}
+
+        .top{height:35vh; background-color:green;}
+        .topleft{height:35vh; background-color:firebrick}
+        .button{width:100%; height:10vh;  border-radius:10px;border:solid 2px black; margin:0px;}
+        #scenList{width:100%; background-color:white;border:solid 2px black; border-radius:10px;}
+        #scenList option{font-size:24px; border:solid 2px black; border-radius:10px;}
+        #scenList option:active{background-color:grey;}
+        .selectHead{background-color:beige; border:solid 2px black; border-radius:10px; height:10vh; margin:0px;}
+	</style>
+    <!--END OF YOUR OWN CSS-->
+    <link rel="shortcut icon" href="">
+</head>
+<body>
+    <div class="row">
+        <div class="col-lg-03 col-md-04 col-sm-06 topleft">
+            <h1>Choose a Department</h1>
+            <select name="department" id="departments">
+                <option value="All">All</option>
+                <option value="Accounting">Accounting</option>
+                <option value="IT">IT</option>
+                <option value="HR" selected="selected">HR</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+        </div>
+        <div class="col-lg-09 col-md-08 col-sm-06 top"></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 "><button onclick="javascript: getScenario();" class="button"><h1>Request Random Scenario</h1></button></div>
+        <div class="col-lg-12 col-md-12 col-sm-12"><button onclick="javascript: getLogOn()" class="button"><h1>Vote on Scenario Respone</h1></button></div>
+
+    </div>
+   
+
+
+</body>
+</html>
