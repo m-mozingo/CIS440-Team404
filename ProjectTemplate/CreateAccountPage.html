@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        * {
+            background-color: bisque;
+            text-align: center;
+        }
+
+        input {
+            text-align: left;
+        }
+
+        label {
+            padding-right: 5px;
+        }
+
+        #createAccountFormId {
+            border: solid black;
+            background-color: white;
+            height: 300px;
+            margin-left: 300px;
+            margin-right: 300px;
+        }
+
+        .white * {
+            background-color: white;
+        }
+    </style>
+
+    <script href="JavaScript.js"></script>
+    <script>
+
+        function processForm(inputForm) {
+
+            //Form will not submit without all input forms completed
+            if (!inputForm.checkValidity()) {
+                alert("See highlighted input boxes, there are input errors!");
+            }
+            else {
+
+                var fname = document.getElementById("fNameCreateId").value;
+                var lName = document.getElementById("lnameCreateId").value;
+                var mail = document.getElementById("mailCreateId").value;
+                var username = document.getElementById("usernameCreateId").value;
+                var pass = document.getElementById("passwordCreateId").value;
+                var department = document.getElementById("departmentId").value;
+
+                //WebService "AccountValidate" goes here
+                //AccountValidate(username)
+                //if (AccountValidate(username)) {
+
+                    // WebService "Create Account" goes here
+                    //CreateAccounts(fname, lName, mail, username, pass, department)
+
+                    // alert("Account Created! Please continue by logging in")
+
+
+                    //window.location.href = 'file:///C:/Users/baden/OneDrive/Desktop/CIS%20440%20Project/LoginPage/Login%20Page.html';
+                //}
+                //else {
+                    //alert("ERROR: Username and/or password already in use. Please enter a new username/password")
+                //}
+
+            }
+
+                }
+    </script>
+
+    <title>Create Account</title>
+</head>
+<body>
+
+    <h1>Create Account</h1>
+
+    <p>Please enter info below:</p>
+
+    <form id="createAccountFormId" class="white">
+
+        <br>
+
+        <label>First Name: </label>
+        <input id="fNameCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Last Name: </label>
+        <input id="lnameCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Email: </label>
+        <input id="mailCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Username: </label>
+        <input id="usernameCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Password: </label>
+        <input id="passwordCreateId" type="text" value="" required>
+
+        <br><br>
+
+        <label>Department: </label>
+        <select name="department" id="departmentId">
+            <option disabled selected> -- Select an option -- </option>
+            <option value="Accounting">Accounting</option>
+            <option value="Logistics">Logistics</option>
+            <option value="Management">Management</option>
+        </select>
+
+        <br><br>
+
+        <!-- Sends data to database -->
+        <button type="button" onclick="processForm(this.form)">Register</button>
+
+    </form>
+
+
+</body>
+</html>
