@@ -56,9 +56,14 @@
             if (confirm("Are you sure you want to sign out?")) {
 
                 delete accData[0][6];
-                window.location.href = "HomePage.html";
-                window.location.assign("HomePage.html");
+                window.location.href = "LoginPage.html";
+                window.location.assign("LoginPage.html");
             }
+        }
+
+        function returnHome() {
+            window.location.href = "HomePage.html";
+            window.location.assign("HomePage.html");
         }
 
 	</script>
@@ -147,6 +152,11 @@
             border-radius: 10px;
         }
         #replyButton{margin-left:80%; width:80px;}
+
+        button {
+            float: right;
+            margin: 1%;
+        }
 	</style>
 	<!--END OF YOUR OWN CSS-->
 </head >
@@ -165,6 +175,7 @@
     </div>
     <div class="row">
         <button onclick="javascript: reply()" id="replyButton">Reply</button>
+        <br>
         <button onclick="javascript: returnHome()" id="returnButton">Return Home</button>
     </div>
 </body>

@@ -81,19 +81,19 @@
         /*onload once again sets the scen text as you saw before so the user can still see the scenario text*/
 
         function showID() {
-            var ID = accData[0];
+            var ID = accData[0][0];
             alert("Your account ID is: " + ID);
         }
 
         function showUsername() {
-            var username = accData[4];
+            var username = accData[0][4];
             alert("Your username is: " + username);
         }
 
         function logOut() {
             if (confirm("Are you sure you want to sign out?")) {
 
-                delete accData[0][6];
+                localStorage.clear;
                 window.location.href = "HomePage.html";
                 window.location.assign("HomePage.html");
             }
@@ -210,6 +210,7 @@
         <h1>Your Response:</h1>
         <textarea class="bottom col-lg-12 col-md-12 col-sm-12" id="responseText"></textarea>
         <button onclick="javascript: reply()" id="replyButton">Send</button>
+        <button onclick="javascript: returnHome()">Return Home</button>
     </div>
 </body>
 </html >
