@@ -36,9 +36,19 @@
                 success: function (msg) {
                     var data = msg.d;
                     var ifFalse = data[0][0]
+                    // grabs 'AdminStatus' from database and checks if true
+                    // PLEASE VERIFY. UNSURE IF CORRECT.
+                    var adminTrue = data[8]
                     if (ifFalse == "false") {
                         alert("Check your username and password")
                     }
+                    // sends admins to AdminPage
+                    if (adminTrue == "true") {
+                        localStorage.accountData = JSON.stringify(data);
+                        window.location.href = "AdminPage.html";
+                        window.location.assign("AdminPage.html");
+                    }
+                    // sends users to HomePage
                     else {
                         localStorage.accountData = JSON.stringify(data);
                         window.location.href = "HomePage.html";
