@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        /*
+        var userPass;
+        function getCred() {
+            username = document.getElementById("usernameLoginId").value;
+
+            pass = document.getElementById("passwordLoginId").value
+            userPass = [username, pass]
+            getLogOn();
+        }
+        */
+        function getLogOn() {
+            var webMethod = "ProjectServices.asmx/Test";
+            var parameters = "{} ";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    console.log(data)
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+        /*
+        function getLogOn() {
+            var webMethod = "ProjectServices.asmx/LogOn";
+            var parameters = "{\"userPass\":\"" + encodeURI(userPass) + "\"} ";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var data = msg.d;
+                    console.log(data)
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+        */
+    </script>
+
+    <style>
+
+        * {
+            background-color: bisque;
+            text-align: center;
+        }
+
+        input {
+            text-align: left;
+            background-color: white;
+        }
+
+        label {
+            padding-right: 5px;
+            background-color: white;
+        }
+
+        #loginFormId {
+            border: solid black;
+            background-color: white;
+            height: 125px;
+            margin-left: 350px;
+            margin-right: 350px;
+        }
+
+        .white * {
+            background-color: white;
+        }
+
+        button {
+            background-color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Login</h1>
+
+    <form id="loginFormId">
+
+        <br>
+
+        <label>Username: </label>
+        <input id="usernameLoginId" type="text" value="">
+
+        <br /><br />
+
+        <label>Password :</label>
+        <input id="passwordLoginId" type="text" value="">
+
+        <br><br />
+
+        <button type="button" onclick="javascript: getLogOn()">Log On</button>
+
+                
+
+    </form>
+
+    <br />
+
+    <a href="file:///C:/Users/baden/OneDrive/Desktop/CIS%20440%20Project/CreateAccount/CreateAccount.html">Create Account</a>
+    <br><br>
+    <a href="">Password Reset</a>
+
+</body>
+
+</html>
