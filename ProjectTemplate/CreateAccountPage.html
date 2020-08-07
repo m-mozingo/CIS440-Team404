@@ -35,40 +35,45 @@
     <script href="JavaScript.js"></script>
     <script>
 
-        function processForm(inputForm) {
+        function processForm(form) {
 
-            //Form will not submit without all input forms completed
             if (!inputForm.checkValidity()) {
                 alert("See highlighted input boxes, there are input errors!");
             }
-            else {
 
-                var fname = document.getElementById("fNameCreateId").value;
+            else {
+                var fName = document.getElementById("fNameCreateId").value;
                 var lName = document.getElementById("lnameCreateId").value;
                 var mail = document.getElementById("mailCreateId").value;
                 var username = document.getElementById("usernameCreateId").value;
                 var pass = document.getElementById("passwordCreateId").value;
                 var department = document.getElementById("departmentId").value;
 
-                //WebService "AccountValidate" goes here
-                //AccountValidate(username)
-                //if (AccountValidate(username)) {
+                var createAccQuery = "INSERT INTO `summer2020group1`.`UserAccounts` (`FirstName`, `LastName`, `Email`, `Username`, `Password`, `Department`) VALUES ('" + fName + "'," + lName + "'," + mail + "'," + username + "'," + pass + "'," + department + "');";
+"
 
-                    // WebService "Create Account" goes here
-                    //CreateAccounts(fname, lName, mail, username, pass, department)
-
-                    // alert("Account Created! Please continue by logging in")
-
-
-                    //window.location.href = 'file:///C:/Users/baden/OneDrive/Desktop/CIS%20440%20Project/LoginPage/Login%20Page.html';
-                //}
-                //else {
-                    //alert("ERROR: Username and/or password already in use. Please enter a new username/password")
-                //}
+                var webMethod = "ProjectServices.asmx/TestEditing";
+                var parameters = "{\"query\":\"" + encodeURI(createAccQuery) + "\"} ";
+                //jQuery ajax method
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: parameters,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (msg) {
+                        alert("Account created! Returning to login.")
+                        window.location.href = "LoginPage.html";
+                        window.location.assign("LoginPage.html");
+                    },
+                    error: function (e) {
+                        alert("this code will only execute if javascript is unable to access the webservice");
+                    }
+                });
 
             }
 
-                }
+            
     </script>
 
     <title>Create Account</title>
