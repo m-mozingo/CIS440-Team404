@@ -12,7 +12,7 @@
         var departmentQuery;
         var accData;
         var department;
-        
+
         function getScenario() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(departmentQuery) + "\"} ";
@@ -33,7 +33,7 @@
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
-                    } 
+                }
             });
         }
         /*The getScenario function will run when the get random scenario button is pushed
@@ -50,9 +50,9 @@
             deps = document.getElementById("departments");
             deps.value = accData[0][6]
             department = accData[0][6]
-            departmentQuery = "Select * from Scenarios where scenarioDepartment = '" + department + "'";
+            departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ") and s.scenarioDepartment = '" + department + "'";
         }
-        /*the getAccount function pulls the account info from the local Json storage and sets in into accData 
+        /*the getAccount function pulls the account info from the local Json storage and sets in into accData
          This accData lets the account data be accessed by any function in the javascript
          in this script, it will also get the default department of the logged in account and set the select list to that department and the query to have that department*/
 
@@ -61,11 +61,11 @@
             deps.onchange = function () {
                 department = deps.value;
                 if (department != "All") {
-                    departmentQuery = "Select * from Scenarios where scenarioDepartment = '" + department + "'";
-                    }
+                    departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ") and s.scenarioDepartment = '" + department + "'";
+                }
                 else {
-                    departmentQuery = "Select * from Scenarios";
-                    }
+                    departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ")";
+                }
             }
             /*This starts everything
              First the getAccount() method is called - this gets the account data stored in json the was set by the loginPage
@@ -80,22 +80,23 @@
         }
 
         function showID() {
-            var ID = accData[0][0];
+            var ID = accData[0];
             alert("Your account ID is: " + ID);
         }
 
         function showUsername() {
-            var username = accData[0][4];
+            var username = accData[4];
             alert("Your username is: " + username);
         }
 
-        // clears local storage and returns user to login page
         function logOut() {
             if (confirm("Are you sure you want to sign out?")) {
-                localStorage.clear;                
+
+                delete accData[0][6];
                 window.location.href = "LoginPage.html";
                 window.location.assign("LoginPage.html");
             }
+
         }
 
         function resetPassPage() {
@@ -103,102 +104,233 @@
             window.location.assign("PasswordResetPage.html");
         }
 
-        function unlockButtons() {
-            document.getElementById("scenarioDiv")[0].removeAttribute("hidden");
-            document.getElementById("voteDiv")[0].removeAttribute("hidden");
-        }
 
-        
+
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
     <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
     <style>
-		* {
-			box-sizing: 		border-box;
-		}
+        * {
+            box-sizing: border-box;
+        }
 
-		/* For phones (portrait) unless another @media rule below is fired */
-		@media only screen and (max-width: 500px) {
-			.col-sm-00  {display: 		   none; }
-            .col-sm-06  {width: 		    50%; }
-			.col-sm-12 	{width: 		   100%; }
-			body 		{background-color: black;}
-			
-		}
+        /* For phones (portrait) unless another @media rule below is fired */
+        @media only screen and (max-width: 500px) {
+            .col-sm-00 {
+                display: none;
+            }
 
-		/* For medium screens (e.g. landscape phones and portrait tablets) */
-		@media only screen and (min-width: 501px) {
-			.col-md-00  {display: 		   none; }
-			.col-md-01  {width: 		  8.33%; }
-			.col-md-02  {width: 		 16.66%; }
-			.col-md-03  {width: 		 25.00%; }
-			.col-md-04  {width: 		 33.33%; }
-			.col-md-05  {width: 		 41.66%; }
-			.col-md-06  {width: 		 50.00%; }
-			.col-md-07  {width: 		 58.33%; }
-			.col-md-08  {width: 		 66.66%; }
-			.col-md-09  {width: 		 75.00%; }
-			.col-md-10  {width: 		 83.33%; }
-			.col-md-11  {width: 		 91.66%; }
-			.col-md-12  {width: 		100.00%; }
-			body 		{background-color: grey;}
-			
-		}
+            .col-sm-06 {
+                width: 50%;
+            }
 
-		/* For large screens or landscape tablets*/		
-		@media only screen and (min-width: 1024px) {
-			.col-md-00  {display: 		initial; }
-			.col-sm-00  {display:       initial; }
-			.col-lg-01  {width: 		  8.33%; }
-			.col-lg-02  {width: 		 16.66%; }
-			.col-lg-03  {width: 		 25.00%; }
-			.col-lg-04  {width: 		 33.33%; }
-			.col-lg-05  {width: 		 41.66%; }
-			.col-lg-06  {width: 		 50.00%; }
-			.col-lg-07  {width: 		 58.33%; }
-			.col-lg-08  {width: 		 66.66%; }
-			.col-lg-09  {width: 		 75.00%; }
-			.col-lg-10 	{width: 		 83.33%; }
-			.col-lg-11 	{width: 		 91.66%; }
-			.col-lg-12 	{width: 		100.00%; }
-			body 		{background-color: white;}
-			
-		}
+            .col-sm-12 {
+                width: 100%;
+            }
 
-		[class*="col-"] {
-			float: 				left;
-			
-		}
+            body {
+                background-color: black;
+            }
+        }
 
-		.row::after {
-			content: 			"";
-			clear: 				both;
-			display: 			block;
-		}
+        /* For medium screens (e.g. landscape phones and portrait tablets) */
+        @media only screen and (min-width: 501px) {
+            .col-md-00 {
+                display: none;
+            }
 
-		body {
-			font-family: 		sans-serif;
-			font-size: 			12px;		
-			text-align: 		center;
-		}
+            .col-md-01 {
+                width: 8.33%;
+            }
+
+            .col-md-02 {
+                width: 16.66%;
+            }
+
+            .col-md-03 {
+                width: 25.00%;
+            }
+
+            .col-md-04 {
+                width: 33.33%;
+            }
+
+            .col-md-05 {
+                width: 41.66%;
+            }
+
+            .col-md-06 {
+                width: 50.00%;
+            }
+
+            .col-md-07 {
+                width: 58.33%;
+            }
+
+            .col-md-08 {
+                width: 66.66%;
+            }
+
+            .col-md-09 {
+                width: 75.00%;
+            }
+
+            .col-md-10 {
+                width: 83.33%;
+            }
+
+            .col-md-11 {
+                width: 91.66%;
+            }
+
+            .col-md-12 {
+                width: 100.00%;
+            }
+
+            body {
+                background-color: grey;
+            }
+        }
+
+        /* For large screens or landscape tablets*/
+        @media only screen and (min-width: 1024px) {
+            .col-md-00 {
+                display: initial;
+            }
+
+            .col-sm-00 {
+                display: initial;
+            }
+
+            .col-lg-01 {
+                width: 8.33%;
+            }
+
+            .col-lg-02 {
+                width: 16.66%;
+            }
+
+            .col-lg-03 {
+                width: 25.00%;
+            }
+
+            .col-lg-04 {
+                width: 33.33%;
+            }
+
+            .col-lg-05 {
+                width: 41.66%;
+            }
+
+            .col-lg-06 {
+                width: 50.00%;
+            }
+
+            .col-lg-07 {
+                width: 58.33%;
+            }
+
+            .col-lg-08 {
+                width: 66.66%;
+            }
+
+            .col-lg-09 {
+                width: 75.00%;
+            }
+
+            .col-lg-10 {
+                width: 83.33%;
+            }
+
+            .col-lg-11 {
+                width: 91.66%;
+            }
+
+            .col-lg-12 {
+                width: 100.00%;
+            }
+
+            body {
+                background-color: white;
+            }
+        }
+
+        [class*="col-"] {
+            float: left;
+        }
+
+        .row::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        body {
+            font-family: sans-serif;
+            font-size: 12px;
+            text-align: center;
+        }
 
         button {
             float: right;
             margin-right: 1%;
         }
 
-        div {
-            padding: 1%;
+
+        .topleft {
+            height: 35vh;
+            border: solid 2px black;
+            border-radius: 10px;
         }
 
-        .top{height:35vh; background-color:green;}
-        .topleft{height:13vh; background-color:firebrick}
-        .button{width:100%; height:10vh;  border-radius:10px;border:solid 2px black; margin:0px;}
-        #scenList{width:100%; background-color:white;border:solid 2px black; border-radius:10px;}
-        #scenList option{font-size:24px; border:solid 2px black; border-radius:10px;}
-        #scenList option:active{background-color:grey;}
-        .selectHead{background-color:beige; border:solid 2px black; border-radius:10px; height:10vh; margin:0px;}
-	</style>
+        .button {
+            width: 100%;
+            height: 10vh;
+            border-radius: 10px;
+            border: solid 2px black;
+            margin: 0px;
+        }
+
+        #scenList {
+            width: 100%;
+            background-color: white;
+            border: solid 2px black;
+            border-radius: 10px;
+        }
+
+            #scenList option {
+                font-size: 24px;
+                border: solid 2px black;
+                border-radius: 10px;
+            }
+
+                #scenList option:active {
+                    background-color: grey;
+                }
+
+        .selectHead {
+            background-color: beige;
+            border: solid 2px black;
+            border-radius: 10px;
+            height: 10vh;
+            margin: 0px;
+        }
+
+        #selectArea {
+            border: solid 2px black;
+            border-radius: 10px;
+            width: 100%
+        }
+
+        #departments {
+            margin-bottom: 1vh
+        }
+
+        #img {
+            height: 30vh;
+            width: auto
+        }
+    </style>
     <!--END OF YOUR OWN CSS-->
     <link rel="shortcut icon" href="">
 </head>
@@ -213,9 +345,17 @@
     </div>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 topleft">
+            <img src="unnamed.jpg" id="img" />
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div id="selectArea">
             <h1>Choose a Department</h1>
-            <select onselect="unlockButtons()" name="department" id="departments">
-                <option value="All" >All</option>
+            <select name="department" id="departments">
+                <option value="All">All</option>
                 <option value="Accounting">Accounting</option>
                 <option value="IT">IT</option>
                 <option value="HR" selected="selected">HR</option>
@@ -223,15 +363,9 @@
                 <option value="Operations">Operations</option>
             </select>
         </div>
-        <div hidden class="col-lg-09 col-md-08 col-sm-06 top">
-            <p>lorem ipsum</p>
-        </div>
-    </div>
 
-
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12" id="scenarioDiv"><button onclick="getScenario()" class="button" id="random" ><h1>Request Random Scenario</h1></button></div>
-        <div class="col-lg-12 col-md-12 col-sm-12" id="voteDiv"><button class="button" id="vote" ><h1>Vote on Scenario Respone</h1></button></div>
+        <div class="col-lg-12 col-md-12 col-sm-12 "><button onclick="javascript: getScenario();" class="button"><h1>Request Random Scenario</h1></button></div>
+        <div class="col-lg-12 col-md-12 col-sm-12"><button class="button" id="vote"><h1>Vote on Scenario Respone</h1></button></div>
 
     </div>
 
