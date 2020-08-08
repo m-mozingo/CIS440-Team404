@@ -9,6 +9,7 @@
         var newQuery;
         var scenarioQuery = "select * from Scenarios"
         var queryType;
+        var scenarioData
 
         function scenarioList() {
            
@@ -27,6 +28,14 @@
             }
             document.getElementById("newScenario").style.display = "block";
             newTxt = document.getElementById("newScenText");
+        }
+        function report() {
+            var i, tabcontent
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById("responseList").style.display = "block";
         }
 
         window.onload = function () {
@@ -98,11 +107,17 @@
                         option.innerHTML = "ScenarioID:" + data[i][0] +"    Text: " + data[i][1] 
                         option.value= data[i][0]
                     }
+                    setScenData(data)
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
+                
             });
+        }
+        function setScenData(newData){
+            scenarioData = newData
+            console.log(scenarioData)
         }
         function remove(){
             scenID = document.getElementById("scenSel").value
@@ -119,7 +134,9 @@
 
       @media only screen and (max-width: 500px) {
 			.col-sm-00  {display: 		   none; }
+            .col-sm-01  {width: 		  8.33%; } 
             .col-sm-06  {width: 		    50%; }
+            .col-md-10  {width: 		 83.33%; }
 			.col-sm-12 	{width: 		   100%; }
 			body 		{background-color: white;}
 			
@@ -170,9 +187,10 @@
         .tabcontent { display: none; height: 70vh; }
         #newScenTxt {height: 40vh;}
         #scenList{height:50vh;}
-        #rspList{height:60vh;}
+        #rspList{height:50vh;}
         #userList{height:60vh;}
-        #scenList option {margin:0; padding:2px; border:1px grey dashed;  white-space: normal; }
+        #scenList option {margin:0; padding:3px; border:1px grey dashed;  white-space: normal; }
+        #scenReport{height:10vh}
     </style>
 </head>
 <body>
@@ -218,7 +236,7 @@
             </div>
             <div id="scenarioList" class="tabcontent">
                 <div>
-                    <h1>Scenario List</h1>
+                    <h3>Scenario List</h3>
                     <div class="row">
                         <div class="col-lg-01"><p></p></div>
                         <select id="scenList" class="col-lg-10 col-md-12 col-sm-12"></select>
@@ -227,6 +245,7 @@
                     <label>Selected Scenario:</label>
                     <input type="text" id="scenSel" disabled />
                     <button onclick="javascript: remove()">Delete</button>
+                    <button onclick="javascript: report()">View Responses</button>
                 </div>
             </div>
             <div id="responseList" class="tabcontent">
@@ -234,7 +253,12 @@
                     <h1>Response List</h1>
                     <div class="row">
                         <div class="col-lg-01"><p></p></div>
-                        <select id="rspList" class="col-lg-10"></select>
+                        <select id="scenReport" class="col-lg-10 col-md-12 col-sm-12"></select>
+                        <div class="col-lg-01"><p></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-01"><p></p></div>
+                        <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
                         <div class="col-lg-01"><p></p></div>
                     </div>
                 </div>
