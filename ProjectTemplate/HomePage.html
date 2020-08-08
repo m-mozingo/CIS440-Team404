@@ -4,14 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
     <script type="text/javascript">
         var departmentQuery;
         var accData;
         var department;
+
 
         function getScenario() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
@@ -36,13 +35,8 @@
                 }
             });
         }
-        /*The getScenario function will run when the get random scenario button is pushed
-         Whatever the departementQuery department is set as will be the query sent if the select list has not be changed,
-         the default department will be sent in the department variable of the department query.
-         The web method does its thing and once again we get data from the 'data = msg.d' from there we pull a random index from the outer array of returned records
-         this will choose what scenario record randomly
-         we then store that in local json and then move to the scenario page with the window.location lines
-         */
+
+
         function getAccount() {
             var accountText = localStorage.getItem("accountData");
             accData = JSON.parse(accountText)
@@ -52,9 +46,34 @@
             department = accData[0][6]
             departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ") and s.scenarioDepartment = '" + department + "'";
         }
-        /*the getAccount function pulls the account info from the local Json storage and sets in into accData
-         This accData lets the account data be accessed by any function in the javascript
-         in this script, it will also get the default department of the logged in account and set the select list to that department and the query to have that department*/
+
+
+        function showID() {
+            var ID = accData[0];
+            alert("Your account ID is: " + ID);
+        }
+
+
+        function showUsername() {
+            var username = accData[4];
+            alert("Your username is: " + username);
+        }
+
+
+        function logOut() {
+            if (confirm("Are you sure you want to sign out?")) {
+                delete accData[0][6];
+                window.location.href = "LoginPage.html";
+                window.location.assign("LoginPage.html");
+            }
+        }
+
+
+        function resetPassPage() {
+            window.location.href = "PasswordResetPage.html";
+            window.location.assign("PasswordResetPage.html");
+        }
+
 
         window.onload = function () {
             getAccount();
@@ -67,193 +86,65 @@
                     departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ")";
                 }
             }
-            /*This starts everything
-             First the getAccount() method is called - this gets the account data stored in json the was set by the loginPage
-             For some reason it wouldn't work if did it directly from this onload function so set it to its own function
-             then the onchange function for the department select list is set
-             this function will set the query that will be sent to the web services like in the log on page but for the all the scenarios with that department
-             when the select lists current selection changes (ie from marketing to finance)*/
             document.getElementById("vote").onclick = function () {
                 window.location.href = "VotingPage.html";
                 window.location.assign("VotingPage.html");
             }
         }
 
-        function showID() {
-            var ID = accData[0];
-            alert("Your account ID is: " + ID);
-        }
-
-        function showUsername() {
-            var username = accData[4];
-            alert("Your username is: " + username);
-        }
-
-        function logOut() {
-            if (confirm("Are you sure you want to sign out?")) {
-
-                delete accData[0][6];
-                window.location.href = "LoginPage.html";
-                window.location.assign("LoginPage.html");
-            }
-
-        }
-
-        function resetPassPage() {
-            window.location.href = "PasswordResetPage.html";
-            window.location.assign("PasswordResetPage.html");
-        }
-
-
 
     </script>
-    <!--END OF YOUR OWN JAVASCRIPT-->
-    <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
+
+
     <style>
         * {
             box-sizing: border-box;
         }
 
-        /* For phones (portrait) unless another @media rule below is fired */
-        @media only screen and (max-width: 500px) {
-            .col-sm-00 {
-                display: none;
-            }
+       @media only screen and (max-width: 500px) {
+			.col-sm-00  {display: 		   none; }
+            .col-sm-06  {width: 		    50%; }
+			.col-sm-12 	{width: 		   100%; }
+			body 		{background-color: white;}
+			
+		}
 
-            .col-sm-06 {
-                width: 50%;
-            }
+		@media only screen and (min-width: 501px) {
+			.col-md-00  {display: 		   none; }
+			.col-md-01  {width: 		  8.33%; }
+			.col-md-02  {width: 		 16.66%; }
+			.col-md-03  {width: 		 25.00%; }
+			.col-md-04  {width: 		 33.33%; }
+			.col-md-05  {width: 		 41.66%; }
+			.col-md-06  {width: 		 50.00%; }
+			.col-md-07  {width: 		 58.33%; }
+			.col-md-08  {width: 		 66.66%; }
+			.col-md-09  {width: 		 75.00%; }
+			.col-md-10  {width: 		 83.33%; }
+			.col-md-11  {width: 		 91.66%; }
+			.col-md-12  {width: 		100.00%; }
+			body 		{background-color: white;}
+			
+		}
 
-            .col-sm-12 {
-                width: 100%;
-            }
-
-            body {
-                background-color: black;
-            }
-        }
-
-        /* For medium screens (e.g. landscape phones and portrait tablets) */
-        @media only screen and (min-width: 501px) {
-            .col-md-00 {
-                display: none;
-            }
-
-            .col-md-01 {
-                width: 8.33%;
-            }
-
-            .col-md-02 {
-                width: 16.66%;
-            }
-
-            .col-md-03 {
-                width: 25.00%;
-            }
-
-            .col-md-04 {
-                width: 33.33%;
-            }
-
-            .col-md-05 {
-                width: 41.66%;
-            }
-
-            .col-md-06 {
-                width: 50.00%;
-            }
-
-            .col-md-07 {
-                width: 58.33%;
-            }
-
-            .col-md-08 {
-                width: 66.66%;
-            }
-
-            .col-md-09 {
-                width: 75.00%;
-            }
-
-            .col-md-10 {
-                width: 83.33%;
-            }
-
-            .col-md-11 {
-                width: 91.66%;
-            }
-
-            .col-md-12 {
-                width: 100.00%;
-            }
-
-            body {
-                background-color: grey;
-            }
-        }
-
-        /* For large screens or landscape tablets*/
-        @media only screen and (min-width: 1024px) {
-            .col-md-00 {
-                display: initial;
-            }
-
-            .col-sm-00 {
-                display: initial;
-            }
-
-            .col-lg-01 {
-                width: 8.33%;
-            }
-
-            .col-lg-02 {
-                width: 16.66%;
-            }
-
-            .col-lg-03 {
-                width: 25.00%;
-            }
-
-            .col-lg-04 {
-                width: 33.33%;
-            }
-
-            .col-lg-05 {
-                width: 41.66%;
-            }
-
-            .col-lg-06 {
-                width: 50.00%;
-            }
-
-            .col-lg-07 {
-                width: 58.33%;
-            }
-
-            .col-lg-08 {
-                width: 66.66%;
-            }
-
-            .col-lg-09 {
-                width: 75.00%;
-            }
-
-            .col-lg-10 {
-                width: 83.33%;
-            }
-
-            .col-lg-11 {
-                width: 91.66%;
-            }
-
-            .col-lg-12 {
-                width: 100.00%;
-            }
-
-            body {
-                background-color: white;
-            }
-        }
+		@media only screen and (min-width: 1024px) {
+			.col-md-00  {display: 		initial; }
+			.col-sm-00  {display:       initial; }
+			.col-lg-01  {width: 		  8.33%; }
+			.col-lg-02  {width: 		 16.66%; }
+			.col-lg-03  {width: 		 25.00%; }
+			.col-lg-04  {width: 		 33.33%; }
+			.col-lg-05  {width: 		 41.66%; }
+			.col-lg-06  {width: 		 50.00%; }
+			.col-lg-07  {width: 		 58.33%; }
+			.col-lg-08  {width: 		 66.66%; }
+			.col-lg-09  {width: 		 75.00%; }
+			.col-lg-10 	{width: 		 83.33%; }
+			.col-lg-11 	{width: 		 91.66%; }
+			.col-lg-12 	{width: 		100.00%; }
+			body 		{background-color: white;}
+			
+		}
 
         [class*="col-"] {
             float: left;
@@ -331,11 +222,9 @@
             width: auto
         }
     </style>
-    <!--END OF YOUR OWN CSS-->
-    <link rel="shortcut icon" href="">
 </head>
-<body>
 
+<body>
     <div class="row" style="background-color:aquamarine;padding:1%">
         <button onclick="logOut()">Logout</button>
         <button onclick="resetPassPage()">Reset Password</button>
@@ -348,9 +237,6 @@
             <img src="unnamed.jpg" id="img" />
         </div>
     </div>
-
-
-
     <div class="row">
         <div id="selectArea">
             <h1>Choose a Department</h1>
@@ -362,13 +248,8 @@
                 <option value="Marketing">Marketing</option>
             </select>
         </div>
-
         <div class="col-lg-12 col-md-12 col-sm-12 "><button onclick="javascript: getScenario();" class="button"><h1>Request Random Scenario</h1></button></div>
-        <div class="col-lg-12 col-md-12 col-sm-12"><button class="button" id="vote"><h1>Vote on Scenario Respone</h1></button></div>
-
+        <div class="col-lg-12 col-md-12 col-sm-12"><button class="button" id="vote"><h1>Vote on Scenario Response</h1></button></div>
     </div>
-
-
-
 </body>
 </html>
