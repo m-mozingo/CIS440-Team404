@@ -13,7 +13,7 @@
         var scenarioData
 
         function scenarioList() {
-           
+
             var i, tabcontent
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -81,7 +81,7 @@
                 dataType: "json",
                 success: function (msg) {
                     var data = msg.d;
-                    
+
                     if (queryType == 0) {
                         alert("Scenario was added!")
                         getScenario();
@@ -115,38 +115,34 @@
                     list.size = data.length;
                     for (i = 0; i < data.length; i++) {
                         option = list.appendChild(document.createElement('option'))
-                        option.innerHTML = "ScenarioID:" + data[i][0] +"    Text: " + data[i][1] 
-                        option.value= data[i][0]
+                        option.innerHTML = "ScenarioID:" + data[i][0] + "    Text: " + data[i][1]
+                        option.value = data[i][0]
                     }
                     setScenData(data)
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
-                
+
             });
         }
-        function setScenData(newData){
+        function setScenData(newData) {
             scenarioData = newData
             console.log(scenarioData)
         }
-        function remove(){
+        function remove() {
             scenID = document.getElementById("scenSel").value
             newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
             queryType = 1;
             send()
         }
-        
-    </script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
 
         function getScenResponses() {
 
+            var curResponselist = document.getElementById('responseList')
+
             scenID = document.getElementById("scenSel").value
-            var responseQuery = "SELECT responseID, userResponse FROM summer2020group1.Response WHERE scenarioID = '" + scenID + "';";
+            var responseQuery = "SELECT responseID, userResponse, VoteCount FROM summer2020group1.Response WHERE scenarioID = '" + scenID + "';";
 
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(responseQuery) + "\"} ";
@@ -170,15 +166,19 @@
                         option.innerHTML = "ResponseID:" + data[i][0] + " - " + data[i][1];
                         option.value = data[i][0]
                     }
+                    curResponselist.onchange = function () {
+                        document.getElementById("responseSel").value = curResponselist.value
+                    }
                     updateSelResponse();
                     setScenData(data)
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
-                
+
             });
         }
+
 
         function updateSelResponse() {
 
@@ -188,11 +188,19 @@
             }
         }
 
-        function setScenData(newData){
+        function updateResponseVote() {
+
+            var curResponselist = document.getElementById('responseList')
+            curResponselist.onchange = function () {
+                document.getElementById("voteSel").value = curResponselist.value
+            }
+        }
+
+        function setScenData(newData) {
             scenarioData = newData
             console.log(scenarioData)
         }
-        function remove(){
+        function remove() {
             scenID = document.getElementById("scenSel").value
             newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
             queryType = 1;
@@ -205,72 +213,227 @@
             queryType = 1;
             send()
         }
-        
+
     </script>
     <style>
+
         * {
             box-sizing: border-box;
         }
 
-      @media only screen and (max-width: 500px) {
-			.col-sm-00  {display: 		   none; }
-            .col-sm-01  {width: 		  8.33%; } 
-            .col-sm-06  {width: 		    50%; }
-            .col-md-10  {width: 		 83.33%; }
-			.col-sm-12 	{width: 		   100%; }
-			body 		{background-color: white;}
-			
-		}
+        @media only screen and (max-width: 500px) {
+            .col-sm-00 {
+                display: none;
+            }
 
-		@media only screen and (min-width: 501px) {
-			.col-md-00  {display: 		   none; }
-			.col-md-01  {width: 		  8.33%; }
-			.col-md-02  {width: 		 16.66%; }
-			.col-md-03  {width: 		 25.00%; }
-			.col-md-04  {width: 		 33.33%; }
-			.col-md-05  {width: 		 41.66%; }
-			.col-md-06  {width: 		 50.00%; }
-			.col-md-07  {width: 		 58.33%; }
-			.col-md-08  {width: 		 66.66%; }
-			.col-md-09  {width: 		 75.00%; }
-			.col-md-10  {width: 		 83.33%; }
-			.col-md-11  {width: 		 91.66%; }
-			.col-md-12  {width: 		100.00%; }
-			body 		{background-color: white;}
-			
-		}
+            .col-sm-01 {
+                width: 8.33%;
+            }
+
+            .col-sm-06 {
+                width: 50%;
+            }
+
+            .col-md-10 {
+                width: 83.33%;
+            }
+
+            .col-sm-12 {
+                width: 100%;
+            }
+
+            body {
+                background-color: white;
+            }
+        }
+
+        @media only screen and (min-width: 501px) {
+            .col-md-00 {
+                display: none;
+            }
+
+            .col-md-01 {
+                width: 8.33%;
+            }
+
+            .col-md-02 {
+                width: 16.66%;
+            }
+
+            .col-md-03 {
+                width: 25.00%;
+            }
+
+            .col-md-04 {
+                width: 33.33%;
+            }
+
+            .col-md-05 {
+                width: 41.66%;
+            }
+
+            .col-md-06 {
+                width: 50.00%;
+            }
+
+            .col-md-07 {
+                width: 58.33%;
+            }
+
+            .col-md-08 {
+                width: 66.66%;
+            }
+
+            .col-md-09 {
+                width: 75.00%;
+            }
+
+            .col-md-10 {
+                width: 83.33%;
+            }
+
+            .col-md-11 {
+                width: 91.66%;
+            }
+
+            .col-md-12 {
+                width: 100.00%;
+            }
+
+            body {
+                background-color: white;
+            }
+        }
 
         @media only screen and (min-width: 1024px) {
-            .col-md-00 { display: initial;}
-            .col-sm-00 { display: initial;}
-            .col-lg-01 {  width: 8.33%; }
-            .col-lg-02 { width: 16.66%; }
-            .col-lg-03 {  width: 25.00%;  }
-            .col-lg-04 { width: 33.33%; }
-            .col-lg-05 { width: 41.66%;}
-            .col-lg-06 { width: 50.00%; }
-            .col-lg-07 { width: 58.33%;}
-            .col-lg-08 { width: 66.66%; }
-            .col-lg-09 { width: 75.00%; }
-            .col-lg-10 { width: 83.33%; }
-            .col-lg-11 {width: 91.66%;}
-            .col-lg-12 {width: 100.00%;}
-            body { background-color: white;}
+            .col-md-00 {
+                display: initial;
+            }
+
+            .col-sm-00 {
+                display: initial;
+            }
+
+            .col-lg-01 {
+                width: 8.33%;
+            }
+
+            .col-lg-02 {
+                width: 16.66%;
+            }
+
+            .col-lg-03 {
+                width: 25.00%;
+            }
+
+            .col-lg-04 {
+                width: 33.33%;
+            }
+
+            .col-lg-05 {
+                width: 41.66%;
+            }
+
+            .col-lg-06 {
+                width: 50.00%;
+            }
+
+            .col-lg-07 {
+                width: 58.33%;
+            }
+
+            .col-lg-08 {
+                width: 66.66%;
+            }
+
+            .col-lg-09 {
+                width: 75.00%;
+            }
+
+            .col-lg-10 {
+                width: 83.33%;
+            }
+
+            .col-lg-11 {
+                width: 91.66%;
+            }
+
+            .col-lg-12 {
+                width: 100.00%;
+            }
+
+            body {
+                background-color: white;
+            }
         }
-        [class*="col-"] { float: left; }
-        .row::after { content: "";  clear: both;  display: block; }
-        body { font-family: sans-serif;   font-size: 12px; text-align: center;}
-        .top { height: 20vh; border: solid 2px black;}
-        .control {height: 50vh; border: solid 2px black;}
-        .tab {height: 70vh;border: solid 2px black;}
-        .button { height: 9vh; margin-bottom: 1vh;}
-        .tabcontent { display: none; height: 70vh; }
-        #newScenTxt {height: 40vh;}
-        #scenList{height:50vh;}
-        #rspList{height:50vh;}
-        #userList{height:60vh;}
-        #scenList option {margin:0; padding:3px; border:1px grey dashed;  white-space: normal; }
-        #scenReport{height:10vh}
+
+        [class*="col-"] {
+            float: left;
+        }
+
+        .row::after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        body {
+            font-family: sans-serif;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .top {
+            height: 20vh;
+            border: solid 2px black;
+        }
+
+        .control {
+            height: 50vh;
+            border: solid 2px black;
+        }
+
+        .tab {
+            height: 70vh;
+            border: solid 2px black;
+        }
+
+        .button {
+            height: 9vh;
+            margin-bottom: 1vh;
+        }
+
+        .tabcontent {
+            display: none;
+            height: 70vh;
+        }
+
+        #newScenTxt {
+            height: 40vh;
+        }
+
+        #scenList {
+            height: 50vh;
+        }
+
+        #rspList {
+            height: 50vh;
+        }
+
+        #userList {
+            height: 60vh;
+        }
+
+        #scenList option {
+            margin: 0;
+            padding: 3px;
+            border: 1px grey dashed;
+            white-space: normal;
+        }
+
+        #scenReport {
+            height: 10vh
+        }
     </style>
 </head>
 <body>
@@ -370,10 +533,10 @@
                     <select id="responseList" class="col-lg-10 col-md-12 col-sm-12"></select>
                     <label>Selected Response:</label>
                     <input type="text" id="responseSel" disabled>
-                    <button onclick="removeRespose()">Delete Response</button>
+                    <button onclick="removeResponse()">Delete Response</button>
                     <br />
                     <label>Total votes</label>
-                    <input disabled>
+                    <input type="text" id="voteSel" disabled>
 
                 </div>
             </div>

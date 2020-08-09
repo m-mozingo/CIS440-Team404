@@ -49,14 +49,19 @@
 
 
         function showID() {
-            var ID = accData[0];
+            var ID = accData[0][0];
             alert("Your account ID is: " + ID);
         }
 
 
         function showUsername() {
-            var username = accData[4];
+            var username = accData[0][4];
             alert("Your username is: " + username);
+        }
+
+        function showPoints() {
+            var points = accData[7];
+            alert("Your current point total is: " + points);
         }
 
 
@@ -228,7 +233,7 @@
     <div class="row" style="background-color:aquamarine;padding:1%">
         <button onclick="logOut()">Logout</button>
         <button onclick="resetPassPage()">Reset Password</button>
-        <button>Points</button>
+        <button onclick="showPoints()">Points</button>
         <button onclick="showUsername()">Username</button>
         <button onclick="showID()">ID</button>
     </div>
