@@ -8,8 +8,6 @@
 
 	<!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
 	<script type="text/javascript">
-        
-       
         var responseQuery;
         var accData;
         var scenText;
@@ -19,16 +17,20 @@
             accData = JSON.parse(accountText)
             console.log(accData)
         }
-        /*gets account data from the json
-         is used in this page*/
+
+
         function reply() {
             var txt = document.getElementById("responseText").value
             var userID = accData[0][0]
             var scenID = scenText[0][0]
             responseQuery = "INSERT INTO `summer2020group1`.`Response`(`userResponse`, `userID`, `scenarioID`) VALUES('" + txt + "', '" + userID + "', '" + scenID + "')";
             if (txt != "") {
-                console.log("not empty")
                 sendReply();
+                point = Number(accData[0][7]) + Number(scenText[4])
+                responseQuery = "UPDATE`summer2020group1`.`UserAccounts` SET`PointTotal` =" + point + " WHERE(`ID` =" + accData[0][0] + ")";
+                sendReply()
+                accData[0][7] = point
+                localStorage.accountData = JSON.stringify(accData);
                 alert("Reply Sent")
                 window.location.assign("HomePage.html");
             }
@@ -37,20 +39,11 @@
                 alert("Please fill out the response text box")
             }
         }
-        /*runs when the reply button is pushed 
-         gets the text of the textarea element and stores it in the txt variable
-         it also get the accountID/current user and the scenID 
-         again this was pulled from the local json and the data was set from the log on page and the home page
-         responseQuery like the others sets the txt userId and scenId to get the query ready to go to the webmethod
-         the if statement checks if the txt variable is empty, and sends an alert if it is
-         if it isnt then the sendReply method is called which is the function that sends the query to the 'testEditing' web method which can execute insert queries
-         then alerts that the reply was sent*/
+        
 
 		function sendReply() {
             var webMethod = "ProjectServices.asmx/TestEditing";
             var parameters = "{\"query\":\"" + encodeURI(responseQuery) + "\"} ";
-
-			//jQuery ajax method
 			$.ajax({
 				type: "POST",
 				url: webMethod,
@@ -66,9 +59,34 @@
 				}
 			});
         }
-        /*the send reply is like everyother ajax method the only things changed is the parameter and the web method being called
-         the responsequery is sent and somewhere I need to send the user back to the home page
-         nothing is set up to deal with the return from the web method as long as it isnt an error message it most likely went through*/
+
+
+        function showID() {
+            var ID = accData[0][0];
+            alert("Your account ID is: " + ID);
+        }
+
+
+        function showUsername() {
+            var username = accData[0][4];
+            alert("Your username is: " + username);
+        }
+
+
+        function logOut() {
+            if (confirm("Are you sure you want to sign out?")) {
+                localStorage.clear;
+                window.location.href = "LoginPage.html";
+                window.location.assign("LoginPage.html");
+            }
+        }
+
+
+        function returnHome() {
+            window.location.href = "HomePage.html";
+            window.location.assign("HomePage.html");
+        }
+
 
         window.onload = function () {
             getAccount();
@@ -78,32 +96,6 @@
             console.log(scenText);
             scenBox.innerHTML = scenText[1];
         }
-        /*onload once again sets the scen text as you saw before so the user can still see the scenario text*/
-
-        function showID() {
-            var ID = accData[0][0];
-            alert("Your account ID is: " + ID);
-        }
-
-        function showUsername() {
-            var username = accData[0][4];
-            alert("Your username is: " + username);
-        }
-
-        function logOut() {
-            if (confirm("Are you sure you want to sign out?")) {
-
-                localStorage.clear;
-                window.location.href = "LoginPage.html";
-                window.location.assign("LoginPage.html");
-            }
-        }
-
-        function returnHome() {
-            window.location.href = "HomePage.html";
-            window.location.assign("HomePage.html");
-        }
-
 	</script>
 	<!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -113,16 +105,14 @@
 			box-sizing: 		border-box;
 		}
 
-		/* For phones (portrait) unless another @media rule below is fired */
 		@media only screen and (max-width: 500px) {
 			.col-sm-00  {display: 		   none; }
             .col-sm-06  {width: 		    50%; }
 			.col-sm-12 	{width: 		   100%; }
-			body 		{background-color: grey;}
+			body 		{background-color: white;}
 			
 		}
 
-		/* For medium screens (e.g. landscape phones and portrait tablets) */
 		@media only screen and (min-width: 501px) {
 			.col-md-00  {display: 		   none; }
 			.col-md-01  {width: 		  8.33%; }
@@ -137,11 +127,10 @@
 			.col-md-10  {width: 		 83.33%; }
 			.col-md-11  {width: 		 91.66%; }
 			.col-md-12  {width: 		100.00%; }
-			body 		{background-color: lightgrey;}
+			body 		{background-color: white;}
 			
 		}
 
-		/* For large screens or landscape tablets*/		
 		@media only screen and (min-width: 1024px) {
 			.col-md-00  {display: 		initial; }
 			.col-sm-00  {display:       initial; }
@@ -195,9 +184,9 @@
             float: right;
             margin-right:1%;
         }
-	</style>
-	<!--END OF YOUR OWN CSS-->
+	</style>>
 </head >
+
 <body>
 
     <div class="row" style="background-color:aquamarine;padding:1%">
