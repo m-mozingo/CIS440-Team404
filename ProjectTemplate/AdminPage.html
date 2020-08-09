@@ -10,8 +10,7 @@
         var scenarioQuery = "select * from Scenarios"
         var voteQuery = ""
         var queryType;
-        var scenarioData
-
+        
         function scenarioList() {
 
             var i, tabcontent
@@ -21,6 +20,8 @@
             }
             document.getElementById("scenarioList").style.display = "block";
         }
+
+
         function newScenario() {
             var i, tabcontent
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -30,13 +31,13 @@
             document.getElementById("newScenario").style.display = "block";
             newTxt = document.getElementById("newScenText");
         }
-        function report() {
-            var i, tabcontent
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            document.getElementById("responseList").style.display = "block";
+
+
+        function remove() {
+            scenID = document.getElementById("scenSel").value
+            newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
+            queryType = 1;
+            send()
         }
 
         function adminReport() {
@@ -96,6 +97,8 @@
                 }
             });
         }
+
+
         function getScenario() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
@@ -214,6 +217,28 @@
             send()
         }
 
+        
+        
+        window.onload = function () {
+            var submit = document.getElementById("submit")
+            submit.onclick = function () {
+                var newTxt = document.getElementById("newScenTxt").value
+                var department = document.getElementById("departments").value;
+                var points = document.getElementById("points").value
+                var limit = document.getElementById("limit").value
+                newQuery = "INSERT INTO`summer2020group1`.`Scenarios`(`scenarioText`, `scenarioDepartment`, `pointValue`, `responseLimit`)"
+                newQuery = newQuery + "VALUES('" + newTxt + "', '" + department + "', " + points + ", " + limit + "); "
+                queryType = 0;
+                send();
+            }
+            var curlist = document.getElementById('scenList')
+            curlist.onchange = function () {
+                document.getElementById("scenSel").value = curlist.value
+            }
+            document.getElementById("scenButton").click();
+            getScenario();
+        }
+        
     </script>
     <style>
 
@@ -436,6 +461,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="row top">
         <div class="col-lg-12 col-md-12 col-sm-12" ><h1>Welcome *Admin</h1></div>
@@ -444,8 +470,6 @@
         <div class="col-lg-02 control col-md-12 col-sm-12">
             <div class="row"><button onclick="javascript: scenarioList()" class="button col-lg-12 col-md-12 col-sm-12" id="scenButton">Scenario List</button></div>
             <div class="row"><button onclick="javascript: newScenario()" class="button col-lg-12 col-md-12 col-sm-12">New Scenario</button></div>
-            
-
         </div>
         <div class="col-lg-10 tab col-md-12 col-sm-12">
             <div id="newScenario" class="tabcontent">
