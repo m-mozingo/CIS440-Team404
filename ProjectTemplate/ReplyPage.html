@@ -15,14 +15,14 @@
         function getAccount() {
             var accountText = localStorage.getItem("accountData");
             accData = JSON.parse(accountText)
-            console.log(accData)
         }
 
 
         function reply() {
             var txt = document.getElementById("responseText").value
             var userID = accData[0][0]
-            var scenID = scenText[0][0]
+            var scenID = scenText[0]
+            
             responseQuery = "INSERT INTO `summer2020group1`.`Response`(`userResponse`, `userID`, `scenarioID`) VALUES('" + txt + "', '" + userID + "', '" + scenID + "')";
             if (txt != "") {
                 sendReply();
@@ -35,7 +35,6 @@
                 window.location.assign("HomePage.html");
             }
             else{
-                console.log("text empty")
                 alert("Please fill out the response text box")
             }
         }
@@ -52,7 +51,6 @@
 				dataType: "json",
 				success: function (msg) {
                     var data = msg.d;
-                    console.log(data)
 				},
 				error: function (e) {
 					alert("this code will only execute if javascript is unable to access the webservice");
@@ -93,7 +91,6 @@
             var scenBox = document.getElementById("scenText");
             var jsonText = localStorage.getItem("scenario");
             scenText = JSON.parse(jsonText)
-            console.log(scenText);
             scenBox.innerHTML = scenText[1];
         }
 	</script>

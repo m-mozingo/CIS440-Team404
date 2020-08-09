@@ -44,11 +44,16 @@
                 dataType: "json",
                 success: function (msg) {
                     data = msg.d;
-                    var random = Math.floor(Math.random() * data.length);
-                    console.log(data[random])
-                    localStorage.scenario = JSON.stringify(data[random])
-                    window.location.href = "ScenariosPage.html";
-                    window.location.assign("ScenariosPage.html");
+                    if (data != "") {
+                        var random = Math.floor(Math.random() * data.length);
+                        console.log(data[random])
+                        localStorage.scenario = JSON.stringify(data[random])
+                        window.location.href = "ScenariosPage.html";
+                        window.location.assign("ScenariosPage.html");
+                    }
+                    else {
+                        alert("There are no open scenarios for this department at this time, please select a different department.")
+                    }
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
