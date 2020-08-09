@@ -44,16 +44,18 @@ the getLogOn function in this script is then called
                         alert("Check your username and password")
                     }
                     // sends admins to AdminPage after storing strinified data into local storage to be used throughout site
-                    if (adminTrue == 1) {
-                        localStorage.accountData = JSON.stringify(data);
-                        window.location.href = "AdminPage.html";
-                        window.location.assign("AdminPage.html");
-                    }
-                    // sends users to HomePage
                     else {
-                        localStorage.accountData = JSON.stringify(data);
-                        window.location.href = "HomePage.html";
-                        window.location.assign("HomePage.html");
+                        if (adminTrue == 1) {
+                            localStorage.accountData = JSON.stringify(data);
+                            window.location.href = "AdminPage.html";
+                            window.location.assign("AdminPage.html");
+                        }
+                        // sends users to HomePage
+                        else {
+                            localStorage.accountData = JSON.stringify(data);
+                            window.location.href = "HomePage.html";
+                            window.location.assign("HomePage.html");
+                        }
                     }
 
                 },

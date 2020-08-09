@@ -256,7 +256,6 @@
         //removes user account data from local storage and returns user to login page
         function logOut() {
             if (confirm("Are you sure you want to sign out?")) {
-                delete accData[0][6];
                 window.location.href = "LoginPage.html";
                 window.location.assign("LoginPage.html");
             }

@@ -23,7 +23,7 @@
             console.log(accData)
         }
 
-
+        /*Gets scenarios and gives a random one, then calls to get the scenarios replies*/ 
         function getScenarios() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
@@ -36,6 +36,7 @@
                 dataType: "json",
                 success: function (msg) {
                     data = msg.d;
+                    console.log(data)
                     var random = Math.floor(Math.random() * data.length);
                     scenID = data[random][0]
                     newTxt = document.getElementById("scenText")
@@ -49,7 +50,7 @@
             });
         }
 
-
+        /*Get replies to the random scenario chosen by getScenarios */
         function getReplies() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(replyQuery) + "\"} ";
@@ -67,7 +68,7 @@
                     while (list.firstChild) {
                         list.removeChild(list.firstChild);
                     }
-                    list.size = data.length;
+                    list.size = data.length + 1;
                     for (i = 0; i < data.length; i++) {
                         option = list.appendChild(document.createElement('option'))
                         option.innerHTML = "ResponseID:" + data[i][0] + "    Text: " + data[i][1]
@@ -81,7 +82,7 @@
             });
         }
        
-
+        /*fuction sets the query to send to the database, checks if there isnt a response selected */
         function vote() {
             voteQuery = "INSERT INTO`summer2020group1`.`VoteTable`(`scenarioID`, `responseID`, `userID`) VALUES(" + scenID + ", " + document.getElementById("respSel").value + ", " + accData[0][0] + ")";
             if (document.getElementById("respSel").value == "") {
@@ -92,7 +93,7 @@
             }
         }
 
-
+        /*sends vote query to the database and returns to the homepage */
         function send() {
             var webMethod = "ProjectServices.asmx/TestEditing";
             var parameters = "{\"query\":\"" + encodeURI(voteQuery) + "\"} ";
@@ -122,10 +123,12 @@
             window.location.assign("HomePage.html");
         }
 
-
+        /*onload functions gets user data set the scenario query and calls the function to get scenarios
+         Sets the onchange event for curlist element*/
         window.onload = function () {
             getAccount()
-            scenarioQuery = "select * from Scenarios s where s.scenarioID NOT IN(select v.scenarioID from VoteTable v where v.userID = " + accData[0][0] + ")"
+            scenarioQuery = "select * from Scenarios s where s.scenarioID NOT IN(select v.scenarioID from VoteTable v where v.userID = " + accData[0][0] + ") and s.responseCount >" + 0
+            console.log(scenarioQuery)
             getScenarios()
             var curlist = document.getElementById('responseList')
             curlist.onchange = function () {
