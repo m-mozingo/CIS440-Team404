@@ -32,14 +32,6 @@
             newTxt = document.getElementById("newScenText");
         }
 
-
-        function remove() {
-            scenID = document.getElementById("scenSel").value
-            newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
-            queryType = 1;
-            send()
-        }
-
         function adminReport() {
             var i, tabcontent
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -48,6 +40,15 @@
             }
             document.getElementById("adminReport").style.display = "block";
         }
+
+
+        function remove() {
+            scenID = document.getElementById("scenSel").value
+            newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
+            queryType = 1;
+            send()
+        }
+
 
         window.onload = function () {
             var submit = document.getElementById("submit")
@@ -129,6 +130,43 @@
 
             });
         }
+
+        function getScenarioFiltered() {
+
+            var departmentFilter = document.getElementById("departmentFilter").value;
+
+            var filterQuery = "SELECT * FROM summer2020group1.Scenarios WHERE scenarioDepartment = '" + departmentFilter + "';";
+            console.log(filterQuery)
+            var webMethod = "ProjectServices.asmx/TestRetrieval";
+            var parameters = "{\"query\":\"" + encodeURI(filterQuery) + "\"} ";
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    data = msg.d;
+                    list = document.getElementById('scenList')
+                    while (list.firstChild) {
+                        list.removeChild(list.firstChild);
+                    }
+                    list.size = data.length;
+                    for (i = 0; i < data.length; i++) {
+                        option = list.appendChild(document.createElement('option'))
+                        option.innerHTML = "ScenarioID:" + data[i][0] + "    Text: " + data[i][1]
+                        option.value = data[i][0]
+                    }
+                    setScenData(data)
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+
+            });
+        }
+
         function setScenData(newData) {
             scenarioData = newData
             console.log(scenarioData)
@@ -166,7 +204,7 @@
                     list.size = data.length;
                     for (i = 0; i < data.length; i++) {
                         option = list.appendChild(document.createElement('option'))
-                        option.innerHTML = "ResponseID:" + data[i][0] + " - " + data[i][1];
+                        option.innerHTML = "ID:" + data[i][0] + " VOTES: " + data[i][2] + " - " + data[i][1];
                         option.value = data[i][0]
                     }
                     curResponselist.onchange = function () {
@@ -181,7 +219,6 @@
 
             });
         }
-
 
         function updateSelResponse() {
 
@@ -456,6 +493,13 @@
             white-space: normal;
         }
 
+        #responseList option {
+            margin: 0;
+            padding: 3px;
+            border: 1px grey dashed;
+            white-space: normal;
+        }
+
         #scenReport {
             height: 10vh
         }
@@ -464,7 +508,7 @@
 
 <body>
     <div class="row top">
-        <div class="col-lg-12 col-md-12 col-sm-12" ><h1>Welcome *Admin</h1></div>
+        <div class="col-lg-12 col-md-12 col-sm-12"><h1>Welcome *Admin</h1></div>
     </div>
     <div class="row">
         <div class="col-lg-02 control col-md-12 col-sm-12">
@@ -507,6 +551,19 @@
                 <div>
                     <h3>Scenario List</h3>
                     <div class="row">
+                        <label>Department:</label>
+                        <!--Make this select option do something-->
+                        <select name="department" id="departmentFilter" onchange="getScenarioFiltered()">
+                            <option value="" disabled selected>Filter by Department</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="IT">IT</option>
+                            <option value="HR">HR</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Operations">Operations</option>
+                        </select>
+                        <button onclick="getScenario()">Reset Filter</button>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-01"><p></p></div>
                         <select id="scenList" class="col-lg-10 col-md-12 col-sm-12"></select>
                         <div class="col-lg-01 row"><p></p></div>
@@ -516,29 +573,47 @@
                     <button onclick="javascript: remove()">Delete Scenario</button>
                     <br />
                     <button onclick="getScenResponses(), adminReport()">View Responses and Votes</button>
+                    
                 </div>
                 <div class="row"></div>
             </div>
-            <!--<div id="responseList" class="tabcontent">
+            <div id="adminReport" class="tabcontent">
                 <div>
-                    <h1>Response List</h1>
+                    <h1>Admin Report</h1>
                     <div class="row">
                         <div class="col-lg-01"><p></p></div>
-                        <select id="scenReport" class="col-lg-10 col-md-12 col-sm-12"></select>
-                        <div class="col-lg-01"><p></p></div>
+                        <select id="responseList" class="col-lg-10 col-md-12 col-sm-12"></select>
+                        <div class="col-lg-01 row"><p></p></div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-01"><p></p></div>
-                        <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
-                        <div class="col-lg-01"><p></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-01"><p></p></div>
-                        <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
-                        <div class="col-lg-01"><p></p></div>
-                    </div>
+                    <label>Selected Response:</label>
+                    <input type="text" id="responseSel" disabled>
+                    <button onclick="removeResponse()">Delete Response</button>
+                    <br />
+                    <button onclick="scenarioList()">Reset</button>
                 </div>
-            </div>-->
+                <div class="row"></div>
+            </div>
+
+            <!--<div id="responseList" class="tabcontent">
+        <div>
+            <h1>Response List</h1>
+            <div class="row">
+                <div class="col-lg-01"><p></p></div>
+                <select id="scenReport" class="col-lg-10 col-md-12 col-sm-12"></select>
+                <div class="col-lg-01"><p></p></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01"><p></p></div>
+                <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
+                <div class="col-lg-01"><p></p></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01"><p></p></div>
+                <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
+                <div class="col-lg-01"><p></p></div>
+            </div>
+        </div>
+    </div>-->
             <div id="editList" class="tabcontent">
                 <div>
                     <h1>Account List</h1>
@@ -547,21 +622,6 @@
                         <select id="userList" class="col-lg-10"></select>
                         <div class="col-lg-01"><p></p></div>
                     </div>
-                </div>
-            </div>
-            <div id="adminReport" class="tabcontent"></div>
-            <div>
-                <h1>Admin Report</h1>
-                <div class="row">
-                    <div class="col-lg-01"><p></p></div>
-                    <select id="responseList" class="col-lg-10 col-md-12 col-sm-12"></select>
-                    <label>Selected Response:</label>
-                    <input type="text" id="responseSel" disabled>
-                    <button onclick="removeResponse()">Delete Response</button>
-                    <br />
-                    <label>Total votes</label>
-                    <input type="text" id="voteSel" disabled>
-
                 </div>
             </div>
         </div>
