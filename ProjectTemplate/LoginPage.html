@@ -61,6 +61,16 @@
                 }
             });
         }
+
+        function createAccPage() {
+            window.location.href = "CreateAccountPage.html";
+            window.location.assign("CreateAccountPage.html");
+        }
+
+        function passResetPage() {
+            window.location.href = "PasswordResetPage.html";
+            window.location.assign("PasswordResetPage.html");
+        }
         
     </script>
 
@@ -125,9 +135,9 @@
 
     <br />
 
-    <a href="file:///C:/Users/baden/OneDrive/Desktop/CIS%20440%20Project/CreateAccount/CreateAccount.html">Create Account</a>
+    <button onclick="createAccPage()">Create Account</button>
     <br><br>
-    <a href="">Password Reset</a>
+    <button onclick="passResetPage()">Password Reset</button>
 
 </body>
 
