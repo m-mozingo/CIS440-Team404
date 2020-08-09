@@ -7,6 +7,13 @@
     <title>Login</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
+        /*This runs when the log on button is pushed
+it sets the data from the username and password input elements to the username and password javasript variables
+userPassQuery declared outside of the functions scope at the top, its the query that will be sent to the web-services page through the 'Test' webmethods paramater (string logOnQuery)
+it will set the username and password into it getting ready to be sent
+the console.log was just for testing purposes
+the getLogOn function in this script is then called
+*/
         var userPassQuery;
         function getCreds() {
             var username = document.getElementById("usernameLoginId").value
@@ -15,14 +22,8 @@
             console.log(userPassQuery)
             getLogOn();
         }
-        /*This runs when the log on button is pushed
-         it sets the data from the username and password input elements to the username and password javasript variables
-         userPassQuery declared outside of the functions scope at the top, its the query that will be sent to the web-services page through the 'Test' webmethods paramater (string logOnQuery)
-         it will set the username and password into it getting ready to be sent
-         the console.log was just for testing purposes
-         the getLogOn function in this script is then called
-         */
 
+        // retrieves specific account from database and stores data into local storage
         function getLogOn() {
             var webMethod = "ProjectServices.asmx/Test";
             var parameters = "{\"logOnQuery\":\"" + encodeURI(userPassQuery) + "\"} ";
@@ -37,12 +38,12 @@
                     var data = msg.d;
                     var ifFalse = data[0][0]
                     // grabs 'AdminStatus' from database and checks if true
-                    // PLEASE VERIFY. UNSURE IF CORRECT.
                     var adminTrue = data[0][8]
+                    // validity check for if no user accounts match the username/password provided
                     if (ifFalse == "false") {
                         alert("Check your username and password")
                     }
-                    // sends admins to AdminPage
+                    // sends admins to AdminPage after storing strinified data into local storage to be used throughout site
                     if (adminTrue == 1) {
                         localStorage.accountData = JSON.stringify(data);
                         window.location.href = "AdminPage.html";
@@ -54,7 +55,7 @@
                         window.location.href = "HomePage.html";
                         window.location.assign("HomePage.html");
                     }
-                    
+
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
@@ -62,16 +63,12 @@
             });
         }
 
+        // sends users to createAccount page
         function createAccPage() {
             window.location.href = "CreateAccountPage.html";
             window.location.assign("CreateAccountPage.html");
         }
 
-        function passResetPage() {
-            window.location.href = "PasswordResetPage.html";
-            window.location.assign("PasswordResetPage.html");
-        }
-        
     </script>
 
     <style>
@@ -129,15 +126,13 @@
 
         <button type="button" onclick="javascript: getCreds()">Log On</button>
 
-                
+
 
     </form>
 
     <br />
 
     <button onclick="createAccPage()">Create Account</button>
-    <br><br>
-    <button onclick="passResetPage()">Password Reset</button>
 
 </body>
 

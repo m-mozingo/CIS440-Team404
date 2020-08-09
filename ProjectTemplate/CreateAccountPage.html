@@ -39,10 +39,11 @@
 
         function processForm(inputForm) {
 
+            // check to ensure that all input fields are valid
             if (!inputForm.checkValidity()) {
                 alert("See highlighted input boxes, there are input errors!");
             }
-            
+
             else {
 
                 // variables from form retrieved
@@ -53,7 +54,7 @@
                 var pass = document.getElementById("passwordCreateId").value;
                 var department = document.getElementById("departmentId").value;
 
-                // query sent to database
+                // query crafted to be sent to database
                 var createAccQuery = "INSERT INTO `summer2020group1`.`UserAccounts` (`FirstName`, `LastName`, `Email`, `Username`, `Password`, `Department`) VALUES ('" + fName + "','" + lName + "','" + mail + "','" + username + "','" + pass + "','" + department + "');";
 
 
@@ -66,9 +67,11 @@
                     data: parameters,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    // succeeds if new account is created
                     success: function (msg) {
                         data = msg.d;
                         alert("Account created! Returning to login.")
+                        // returns user to Login Page
                         window.location.href = "LoginPage.html";
                         window.location.assign("LoginPage.html");
                     },

@@ -6,11 +6,14 @@
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
+
+        //global variables declared
         var newQuery;
         var scenarioQuery = "select * from Scenarios"
         var voteQuery = ""
         var queryType;
-        
+
+        // hides display of all tabs other than the Scenario List tab
         function scenarioList() {
 
             var i, tabcontent
@@ -21,7 +24,7 @@
             document.getElementById("scenarioList").style.display = "block";
         }
 
-
+        // hides display of all tabs other than the New Scenario tab
         function newScenario() {
             var i, tabcontent
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -32,6 +35,7 @@
             newTxt = document.getElementById("newScenText");
         }
 
+        // hides display of all tabs other than the Admin Report Tab
         function adminReport() {
             var i, tabcontent
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -41,7 +45,7 @@
             document.getElementById("adminReport").style.display = "block";
         }
 
-
+        // deletes selected scenario from the database
         function remove() {
             scenID = document.getElementById("scenSel").value
             newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
@@ -49,7 +53,7 @@
             send()
         }
 
-
+        // creates database query that generates a new scenario to be used in the future
         window.onload = function () {
             var submit = document.getElementById("submit")
             submit.onclick = function () {
@@ -71,6 +75,7 @@
             getScenario();
         }
 
+        // processes the query generated above
         function send() {
             var webMethod = "ProjectServices.asmx/TestEditing";
             var parameters = "{\"query\":\"" + encodeURI(newQuery) + "\"} ";
@@ -99,7 +104,7 @@
             });
         }
 
-
+        // generates the list of all scenarios and displays them to admin
         function getScenario() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(scenarioQuery) + "\"} ";
@@ -131,6 +136,7 @@
             });
         }
 
+        // same function as above, but filters scenarios by selected department
         function getScenarioFiltered() {
 
             var departmentFilter = document.getElementById("departmentFilter").value;
@@ -171,6 +177,7 @@
             scenarioData = newData
             console.log(scenarioData)
         }
+        // deletes selected scenario from the database
         function remove() {
             scenID = document.getElementById("scenSel").value
             newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
@@ -178,6 +185,7 @@
             send()
         }
 
+        // generates the list of responses to selected scenario and displays them to admin
         function getScenResponses() {
 
             var curResponselist = document.getElementById('responseList')
@@ -220,6 +228,7 @@
             });
         }
 
+        // changes UI display to match selected response
         function updateSelResponse() {
 
             var curResponselist = document.getElementById('responseList')
@@ -228,25 +237,13 @@
             }
         }
 
-        function updateResponseVote() {
-
-            var curResponselist = document.getElementById('responseList')
-            curResponselist.onchange = function () {
-                document.getElementById("voteSel").value = curResponselist.value
-            }
-        }
 
         function setScenData(newData) {
             scenarioData = newData
             console.log(scenarioData)
         }
-        function remove() {
-            scenID = document.getElementById("scenSel").value
-            newQuery = "DELETE FROM`summer2020group1`.`Scenarios` WHERE(`scenarioID` = " + scenID + ")";
-            queryType = 1;
-            send()
-        }
 
+        // deletes selected response from the database
         function removeResponse() {
             responseID = document.getElementById("responseSelect").value
             newQuery = "DELETE FROM`summer2020group1`.`Response` WHERE(`responseID` = " + responseID + ")";
@@ -254,28 +251,17 @@
             send()
         }
 
-        
-        
-        window.onload = function () {
-            var submit = document.getElementById("submit")
-            submit.onclick = function () {
-                var newTxt = document.getElementById("newScenTxt").value
-                var department = document.getElementById("departments").value;
-                var points = document.getElementById("points").value
-                var limit = document.getElementById("limit").value
-                newQuery = "INSERT INTO`summer2020group1`.`Scenarios`(`scenarioText`, `scenarioDepartment`, `pointValue`, `responseLimit`)"
-                newQuery = newQuery + "VALUES('" + newTxt + "', '" + department + "', " + points + ", " + limit + "); "
-                queryType = 0;
-                send();
+
+
+        //removes user account data from local storage and returns user to login page
+        function logOut() {
+            if (confirm("Are you sure you want to sign out?")) {
+                delete accData[0][6];
+                window.location.href = "LoginPage.html";
+                window.location.assign("LoginPage.html");
             }
-            var curlist = document.getElementById('scenList')
-            curlist.onchange = function () {
-                document.getElementById("scenSel").value = curlist.value
-            }
-            document.getElementById("scenButton").click();
-            getScenario();
         }
-        
+
     </script>
     <style>
 
@@ -446,12 +432,12 @@
         }
 
         .top {
-            height: 20vh;
+            height: 10vh;
             border: solid 2px black;
         }
 
         .control {
-            height: 50vh;
+            height: 30vh;
             border: solid 2px black;
         }
 
@@ -514,6 +500,7 @@
         <div class="col-lg-02 control col-md-12 col-sm-12">
             <div class="row"><button onclick="javascript: scenarioList()" class="button col-lg-12 col-md-12 col-sm-12" id="scenButton">Scenario List</button></div>
             <div class="row"><button onclick="javascript: newScenario()" class="button col-lg-12 col-md-12 col-sm-12">New Scenario</button></div>
+            <div class="row"><button onclick="javascript: logOut()" class="button col-lg-12 col-md-12 col-sm-12">Log Out</button></div>
         </div>
         <div class="col-lg-10 tab col-md-12 col-sm-12">
             <div id="newScenario" class="tabcontent">
@@ -552,7 +539,6 @@
                     <h3>Scenario List</h3>
                     <div class="row">
                         <label>Department:</label>
-                        <!--Make this select option do something-->
                         <select name="department" id="departmentFilter" onchange="getScenarioFiltered()">
                             <option value="" disabled selected>Filter by Department</option>
                             <option value="Accounting">Accounting</option>
@@ -573,7 +559,7 @@
                     <button onclick="javascript: remove()">Delete Scenario</button>
                     <br />
                     <button onclick="getScenResponses(), adminReport()">View Responses and Votes</button>
-                    
+
                 </div>
                 <div class="row"></div>
             </div>
@@ -595,25 +581,25 @@
             </div>
 
             <!--<div id="responseList" class="tabcontent">
-        <div>
-            <h1>Response List</h1>
-            <div class="row">
-                <div class="col-lg-01"><p></p></div>
-                <select id="scenReport" class="col-lg-10 col-md-12 col-sm-12"></select>
-                <div class="col-lg-01"><p></p></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-01"><p></p></div>
-                <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
-                <div class="col-lg-01"><p></p></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-01"><p></p></div>
-                <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
-                <div class="col-lg-01"><p></p></div>
-            </div>
-        </div>
-    </div>-->
+                <div>
+                    <h1>Response List</h1>
+                    <div class="row">
+                        <div class="col-lg-01"><p></p></div>
+                        <select id="scenReport" class="col-lg-10 col-md-12 col-sm-12"></select>
+                        <div class="col-lg-01"><p></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-01"><p></p></div>
+                        <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
+                        <div class="col-lg-01"><p></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-01"><p></p></div>
+                        <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
+                        <div class="col-lg-01"><p></p></div>
+                    </div>
+                </div>
+            </div>-->
             <div id="editList" class="tabcontent">
                 <div>
                     <h1>Account List</h1>

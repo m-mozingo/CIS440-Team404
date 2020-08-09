@@ -7,11 +7,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script type="text/javascript">
+        // global variables declared
         var departmentQuery;
         var accData;
         var department;
 
+        // retrieves local storage and creates query to be sent to database
+        window.onload = function () {
+            getAccount();
+            deps.onchange = function () {
+                department = deps.value;
+                if (department != "All") {
+                    departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ") and s.scenarioDepartment = '" + department + "'";
+                }
+                else {
+                    departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ")";
+                }
+            }
+            // sends user to VotingPage
+            document.getElementById("vote").onclick = function () {
+                window.location.href = "VotingPage.html";
+                window.location.assign("VotingPage.html");
+            }
+        }
 
+        // retrieves random scenario from selected department and stores the result in another local storage
         function getScenario() {
             var webMethod = "ProjectServices.asmx/TestRetrieval";
             var parameters = "{\"query\":\"" + encodeURI(departmentQuery) + "\"} ";
@@ -36,7 +56,7 @@
             });
         }
 
-
+        // retrieves user account data from local storage to be used on page
         function getAccount() {
             var accountText = localStorage.getItem("accountData");
             accData = JSON.parse(accountText)
@@ -47,24 +67,25 @@
             departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ") and s.scenarioDepartment = '" + department + "'";
         }
 
-
+        //notifies user of their ID#
         function showID() {
             var ID = accData[0][0];
             alert("Your account ID is: " + ID);
         }
 
-
+        //notifies user of their username
         function showUsername() {
             var username = accData[0][4];
             alert("Your username is: " + username);
         }
 
+        //notifies user of their current points
         function showPoints() {
             var points = accData[7];
             alert("Your current point total is: " + points);
         }
 
-
+        //removes user account data from local storage and returns user to login page
         function logOut() {
             if (confirm("Are you sure you want to sign out?")) {
                 delete accData[0][6];
@@ -73,28 +94,10 @@
             }
         }
 
-
+        // sends user to Password Reset
         function resetPassPage() {
             window.location.href = "PasswordResetPage.html";
             window.location.assign("PasswordResetPage.html");
-        }
-
-
-        window.onload = function () {
-            getAccount();
-            deps.onchange = function () {
-                department = deps.value;
-                if (department != "All") {
-                    departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ") and s.scenarioDepartment = '" + department + "'";
-                }
-                else {
-                    departmentQuery = "select * from Scenarios s where s.scenarioID NOT IN (select r.scenarioID from Response r where r.userID =" + accData[0][0] + ")";
-                }
-            }
-            document.getElementById("vote").onclick = function () {
-                window.location.href = "VotingPage.html";
-                window.location.assign("VotingPage.html");
-            }
         }
 
 
@@ -106,50 +109,143 @@
             box-sizing: border-box;
         }
 
-       @media only screen and (max-width: 500px) {
-			.col-sm-00  {display: 		   none; }
-            .col-sm-06  {width: 		    50%; }
-			.col-sm-12 	{width: 		   100%; }
-			body 		{background-color: white;}
-			
-		}
+        @media only screen and (max-width: 500px) {
+            .col-sm-00 {
+                display: none;
+            }
 
-		@media only screen and (min-width: 501px) {
-			.col-md-00  {display: 		   none; }
-			.col-md-01  {width: 		  8.33%; }
-			.col-md-02  {width: 		 16.66%; }
-			.col-md-03  {width: 		 25.00%; }
-			.col-md-04  {width: 		 33.33%; }
-			.col-md-05  {width: 		 41.66%; }
-			.col-md-06  {width: 		 50.00%; }
-			.col-md-07  {width: 		 58.33%; }
-			.col-md-08  {width: 		 66.66%; }
-			.col-md-09  {width: 		 75.00%; }
-			.col-md-10  {width: 		 83.33%; }
-			.col-md-11  {width: 		 91.66%; }
-			.col-md-12  {width: 		100.00%; }
-			body 		{background-color: white;}
-			
-		}
+            .col-sm-06 {
+                width: 50%;
+            }
 
-		@media only screen and (min-width: 1024px) {
-			.col-md-00  {display: 		initial; }
-			.col-sm-00  {display:       initial; }
-			.col-lg-01  {width: 		  8.33%; }
-			.col-lg-02  {width: 		 16.66%; }
-			.col-lg-03  {width: 		 25.00%; }
-			.col-lg-04  {width: 		 33.33%; }
-			.col-lg-05  {width: 		 41.66%; }
-			.col-lg-06  {width: 		 50.00%; }
-			.col-lg-07  {width: 		 58.33%; }
-			.col-lg-08  {width: 		 66.66%; }
-			.col-lg-09  {width: 		 75.00%; }
-			.col-lg-10 	{width: 		 83.33%; }
-			.col-lg-11 	{width: 		 91.66%; }
-			.col-lg-12 	{width: 		100.00%; }
-			body 		{background-color: white;}
-			
-		}
+            .col-sm-12 {
+                width: 100%;
+            }
+
+            body {
+                background-color: white;
+            }
+        }
+
+        @media only screen and (min-width: 501px) {
+            .col-md-00 {
+                display: none;
+            }
+
+            .col-md-01 {
+                width: 8.33%;
+            }
+
+            .col-md-02 {
+                width: 16.66%;
+            }
+
+            .col-md-03 {
+                width: 25.00%;
+            }
+
+            .col-md-04 {
+                width: 33.33%;
+            }
+
+            .col-md-05 {
+                width: 41.66%;
+            }
+
+            .col-md-06 {
+                width: 50.00%;
+            }
+
+            .col-md-07 {
+                width: 58.33%;
+            }
+
+            .col-md-08 {
+                width: 66.66%;
+            }
+
+            .col-md-09 {
+                width: 75.00%;
+            }
+
+            .col-md-10 {
+                width: 83.33%;
+            }
+
+            .col-md-11 {
+                width: 91.66%;
+            }
+
+            .col-md-12 {
+                width: 100.00%;
+            }
+
+            body {
+                background-color: white;
+            }
+        }
+
+        @media only screen and (min-width: 1024px) {
+            .col-md-00 {
+                display: initial;
+            }
+
+            .col-sm-00 {
+                display: initial;
+            }
+
+            .col-lg-01 {
+                width: 8.33%;
+            }
+
+            .col-lg-02 {
+                width: 16.66%;
+            }
+
+            .col-lg-03 {
+                width: 25.00%;
+            }
+
+            .col-lg-04 {
+                width: 33.33%;
+            }
+
+            .col-lg-05 {
+                width: 41.66%;
+            }
+
+            .col-lg-06 {
+                width: 50.00%;
+            }
+
+            .col-lg-07 {
+                width: 58.33%;
+            }
+
+            .col-lg-08 {
+                width: 66.66%;
+            }
+
+            .col-lg-09 {
+                width: 75.00%;
+            }
+
+            .col-lg-10 {
+                width: 83.33%;
+            }
+
+            .col-lg-11 {
+                width: 91.66%;
+            }
+
+            .col-lg-12 {
+                width: 100.00%;
+            }
+
+            body {
+                background-color: white;
+            }
+        }
 
         [class*="col-"] {
             float: left;
