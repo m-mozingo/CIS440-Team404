@@ -45,6 +45,7 @@ namespace ProjectTemplate
         /////////////////////////////////////////////////////////////////////////
         ///
 
+        /*Method to access a table in database and return records as jagged array*/
         public string[][] TestRetrieval(string query)
         {
             
@@ -91,7 +92,7 @@ namespace ProjectTemplate
         }
  
 
-
+        /*Method to do any Update, insert, delete query*/
         [WebMethod(EnableSession = true)]
         /////////////////////////////////////////////////////////////////////////
         public string TestEditing(string query)
@@ -121,7 +122,7 @@ namespace ProjectTemplate
             }
         }
 
-
+        /*Method similar to test editing but used only for a query to get logon credentials*/
         [WebMethod(EnableSession = true)]
         public string[][] Test(string logOnQuery)
         {

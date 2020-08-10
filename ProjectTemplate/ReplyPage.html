@@ -11,13 +11,15 @@
         var responseQuery;
         var accData;
         var scenText;
-
+        
         function getAccount() {
             var accountText = localStorage.getItem("accountData");
             accData = JSON.parse(accountText)
         }
 
-
+        /*On click function for Send button
+         This sets the query to be sent to the data base and then sets the query to update the useraccounts point total
+         Notifies the user the reply has been sent and returns the user to the home page*/
         function reply() {
             var txt = document.getElementById("responseText").value
             var userID = accData[0][0]
@@ -39,7 +41,7 @@
             }
         }
         
-
+        /*Sends the user type reply to be stored in database*/
 		function sendReply() {
             var webMethod = "ProjectServices.asmx/TestEditing";
             var parameters = "{\"query\":\"" + encodeURI(responseQuery) + "\"} ";
@@ -70,7 +72,7 @@
             alert("Your username is: " + username);
         }
 
-
+        /*Takes user to login page and clear local storage*/
         function logOut() {
             if (confirm("Are you sure you want to sign out?")) {
                 localStorage.clear;
@@ -79,13 +81,13 @@
             }
         }
 
-
+        /*Takes user back to the home page*/
         function returnHome() {
             window.location.href = "HomePage.html";
             window.location.assign("HomePage.html");
         }
 
-
+        /*Onload fuction that gets the stored scenario and sets the value of a textarea with the text of the scenario*/
         window.onload = function () {
             getAccount();
             var scenBox = document.getElementById("scenText");
