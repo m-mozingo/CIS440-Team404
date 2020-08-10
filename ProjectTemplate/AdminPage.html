@@ -253,10 +253,9 @@
 
 
 
-        //removes user account data from local storage and returns user to login page
+        //returns user to login page
         function logOut() {
             if (confirm("Are you sure you want to sign out?")) {
-                delete accData[0][6];
                 window.location.href = "LoginPage.html";
                 window.location.assign("LoginPage.html");
             }
@@ -579,27 +578,6 @@
                 </div>
                 <div class="row"></div>
             </div>
-
-            <!--<div id="responseList" class="tabcontent">
-                <div>
-                    <h1>Response List</h1>
-                    <div class="row">
-                        <div class="col-lg-01"><p></p></div>
-                        <select id="scenReport" class="col-lg-10 col-md-12 col-sm-12"></select>
-                        <div class="col-lg-01"><p></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-01"><p></p></div>
-                        <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
-                        <div class="col-lg-01"><p></p></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-01"><p></p></div>
-                        <select id="rspList" class="col-lg-10 col-md-12 col-sm-12"></select>
-                        <div class="col-lg-01"><p></p></div>
-                    </div>
-                </div>
-            </div>-->
             <div id="editList" class="tabcontent">
                 <div>
                     <h1>Account List</h1>
